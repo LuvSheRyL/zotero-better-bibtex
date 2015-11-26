@@ -868,7 +868,7 @@ Zotero.BetterBibTeX.init = function() {
   this.windowMediator = Components.classes['@mozilla.org/appshell/window-mediator;1'].getService(Components.interfaces.nsIWindowMediator);
   this.migrateData();
   if (this.pref.get('scanCitekeys')) {
-    this.flash('Citation key rescan', "Scanning 'call Number' fields for fixed keys\nFor a large library, this might take a while");
+    this.flash('Citation key rescan', "Scanning 'callNumber' fields for fixed keys\nFor a large library, this might take a while");
     this.cache.reset('scanCitekeys');
     this.keymanager.reset();
     this.pref.set('scanCitekeys', false);
