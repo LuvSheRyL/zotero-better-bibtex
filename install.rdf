@@ -2,13 +2,13 @@
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 	
 	<Description about="urn:mozilla:install-manifest">
-		<em:id>better-bibtex@iris-advies.com</em:id>
-		<em:name>Zotero Better Bib(La)Tex</em:name>
+		<em:id>leoatchina_betterbibtex</em:id>
+		<em:name>Zotero Better Bib(La)Tex-Modified</em:name>
 		<em:version>1.6.6</em:version>
-    <em:description>Make Zotero useful for us LaTeX holdouts.</em:description>
-    <em:homepageURL>https://zotplus.github.io/better-bibtex/</em:homepageURL>
-		<em:creator>Emiliano Heyns</em:creator>
-    <em:iconURL>chrome://zotero-better-bibtex/skin/better-bibtex.svg</em:iconURL>
+        <em:description>Make Zotero useful for us LaTeX holdouts.Modified</em:description>
+        <em:homepageURL>https://zotplus.github.io/better-bibtex/</em:homepageURL>
+		<em:creator>leoatchina work on Emiliano Heyns's origin</em:creator>
+        <em:iconURL>chrome://zotero-better-bibtex/skin/better-bibtex.svg</em:iconURL>
 		<em:updateURL>https://zotplus.github.io/better-bibtex/update.rdf</em:updateURL>
 		<em:type>2</em:type> <!-- type=extension -->
 
@@ -16,8 +16,8 @@
 		<em:targetApplication>
 			<Description>
 				<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-        <em:minVersion>31.0</em:minVersion>
-        <em:maxVersion>44.*</em:maxVersion>
+                <em:minVersion>31.0</em:minVersion>
+                <em:maxVersion>44.*</em:maxVersion>
 			</Description>
 		</em:targetApplication>
 		<em:targetApplication>
