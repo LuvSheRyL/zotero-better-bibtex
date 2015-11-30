@@ -273,6 +273,9 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
 
   _Class.prototype.save = function(item, citekey) {
     var extra;
+    var archiveLocation=item.getField('archiveLocation');
+    var fulltext = new Array;
+    console.log('archiveLocation');
     if (!item.getField) {
       item = Zotero.Items.get(item.itemID);
     }
@@ -283,6 +286,8 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
     extra = extra.extra;
     if (citekey) {
       extra += " bibtex:" + citekey.trim();
+
+
     }
     extra = extra.trim();
     item.setField('callNumber', extra);
