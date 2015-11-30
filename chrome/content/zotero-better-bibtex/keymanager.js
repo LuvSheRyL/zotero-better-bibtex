@@ -273,9 +273,9 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
 
   _Class.prototype.save = function(item, citekey) {
     var extra;
-    var archiveLocation=item.getField('archiveLocation');
+    var archiveLocation='';
     var fulltext = new Array;
-    console.log('archiveLocation');
+
     if (!item.getField) {
       item = Zotero.Items.get(item.itemID);
     }
@@ -286,16 +286,16 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
     extra = extra.extra;
     if (citekey) {
       extra += " bibtex:" + citekey.trim();
-
-
     }
+    //leoatchina:在这里生成archiveLocation
+
     extra = extra.trim();
     item.setField('callNumber', extra);
     return item.save({
       skipDateModifiedUpdate: true
     });
   };
-
+// 下面这个函数是生成citekey用的
   _Class.prototype.set = function(item, citekey, pin) {
     var citekeyFormat, itemID, key, libraryID;
     if (!citekey || citekey.trim() === '') {
@@ -549,3 +549,11 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
   return _Class;
 
 })());
+
+
+
+function jsdump(str) {
+  Components.classes['@mozilla.org/consoleservice;1']
+            .getService(Components.interfaces.nsIConsoleService)
+            .logStringMessage(str);
+}
