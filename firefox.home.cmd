@@ -1,1 +1,1 @@
-"../firefox/firefox.exe" -no-remote -P ffdebug -jsconsole
+"../firefox/firefox.exe" -no-remote -P ffdebug

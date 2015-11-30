@@ -273,9 +273,6 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
 
   _Class.prototype.save = function(item, citekey) {
     var extra;
-    var archiveLocation='';
-    var fulltext = new Array;
-
     if (!item.getField) {
       item = Zotero.Items.get(item.itemID);
     }
@@ -285,10 +282,8 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
     }
     extra = extra.extra;
     if (citekey) {
-      extra += " bibtex:" + citekey.trim();
+      extra += " bibtex:" + citekey;
     }
-    //leoatchina:在这里生成archiveLocation
-
     extra = extra.trim();
     item.setField('callNumber', extra);
     return item.save({
@@ -341,7 +336,9 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
             if (a_item.attachmentMIMEType == 'application/pdf'
                 || a_item.attachmentMIMEType == 'text/html') {
                 // fulltext.push(a_item.attachmentText);
-                jsdump(a_item.attachmentPATH);
+                jsdump(a_item.attachmentPath);
+                jsdump(a_item.key);
+                // jsdump(a_item.attachmentKey);
             }
         }
     }
