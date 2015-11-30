@@ -330,17 +330,24 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
     if (item.isRegularItem()) { // not an attachment already
         var fulltext = new Array;
         var attachments = item.getAttachments(false);
-        var a;
+        var a,temp;
         for (a in attachments) {
             var a_item = Zotero.Items.get(attachments[a]);
-            if (a_item.attachmentMIMEType == 'application/pdf'
-                || a_item.attachmentMIMEType == 'text/html') {
-                // fulltext.push(a_item.attachmentText);
-                jsdump(a_item.attachmentPath);
-                jsdump(a_item.key);
-                // jsdump(a_item.attachmentKey);
+            if (a_item.attachmentMIMEType == 'application/pdf' && a_item.attachmentPath.length>0) {
+              temp=a_item.key+'/'+a_item.attachmentPath.substring(8)+':application/pdf';
+              fulltext.push(temp);
             }
         }
+        for (a in attachments) {
+            var a_item = Zotero.Items.get(attachments[a]);
+            if (a_item.attachmentMIMEType == 'text/html' && a_item.attachmentPath.length>0) {
+              temp=a_item.key+'/'+a_item.attachmentPath.substring(8)+':text/html';
+              fulltext.push(temp);
+            }
+        }
+        temp=fulltext.join(";")
+        jsdump(temp);
+        item.setField('archiveLocation',temp);
     }
 
     if (pin) {
