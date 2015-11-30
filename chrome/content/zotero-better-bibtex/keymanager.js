@@ -295,7 +295,7 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
       skipDateModifiedUpdate: true
     });
   };
-// 下面这个函数是生成citekey用的
+// 下面这个函数是生成citekey用的,看好
   _Class.prototype.set = function(item, citekey, pin) {
     var citekeyFormat, itemID, key, libraryID;
     if (!citekey || citekey.trim() === '') {
@@ -330,6 +330,22 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
       };
       this.db.keys.insert(key);
     }
+
+    //leoatchina:createArchiveLocation
+    if (item.isRegularItem()) { // not an attachment already
+        var fulltext = new Array;
+        var attachments = item.getAttachments(false);
+        var a;
+        for (a in attachments) {
+            var a_item = Zotero.Items.get(attachments[a]);
+            if (a_item.attachmentMIMEType == 'application/pdf'
+                || a_item.attachmentMIMEType == 'text/html') {
+                // fulltext.push(a_item.attachmentText);
+                jsdump(a_item.attachmentPATH);
+            }
+        }
+    }
+
     if (pin) {
       this.save(item, citekey);
     }
