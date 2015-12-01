@@ -271,7 +271,7 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
     }
   };
 
-  _Class.prototype.save = function(item, citekey) {
+  _Class.prototype.save = function(item, citekey, archiveLocation) {
     var extra;
     if (!item.getField) {
       item = Zotero.Items.get(item.itemID);
@@ -284,13 +284,17 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
     if (citekey) {
       extra += " bibtex:" + citekey;
     }
-    extra = extra.trim();
-    item.setField('callNumber', extra);
+    item.setField('callNumber', extra.trim());
+
+    if (archiveLocation){
+      item.setField('archiveLocation', archiveLocation.trim());
+    }
+
     return item.save({
       skipDateModifiedUpdate: true
     });
   };
-// 下面这个函数是生成citekey用的,看好
+
   _Class.prototype.set = function(item, citekey, pin) {
     var citekeyFormat, itemID, key, libraryID;
     if (!citekey || citekey.trim() === '') {
@@ -330,28 +334,26 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
     if (item.isRegularItem()) { // not an attachment already
         var fulltext = new Array;
         var attachments = item.getAttachments(false);
-        var a,temp;
+        var a,archiveLocation;
         for (a in attachments) {
             var a_item = Zotero.Items.get(attachments[a]);
             if (a_item.attachmentMIMEType == 'application/pdf' && a_item.attachmentPath.length>0) {
-              temp=a_item.key+'/'+a_item.attachmentPath.substring(8)+':application/pdf';
-              fulltext.push(temp);
+              archiveLocation=a_item.key+'/'+a_item.attachmentPath.substring(8).trim()+':PDF';
+              fulltext.push(archiveLocation);
             }
         }
         for (a in attachments) {
             var a_item = Zotero.Items.get(attachments[a]);
             if (a_item.attachmentMIMEType == 'text/html' && a_item.attachmentPath.length>0) {
-              temp=a_item.key+'/'+a_item.attachmentPath.substring(8)+':text/html';
-              fulltext.push(temp);
+              archiveLocation=a_item.key+'/'+a_item.attachmentPath.substring(8).trim()+':URL';
+              fulltext.push(archiveLocation);
             }
         }
-        temp=fulltext.join(";")
-        jsdump(temp);
-        item.setField('archiveLocation',temp);
+        archiveLocation=fulltext.join(";:").trim();
+        // jsdump(archiveLocation);
     }
-
     if (pin) {
-      this.save(item, citekey);
+      this.save(item, citekey, archiveLocation);
     }
     return this.verify(key);
   };
