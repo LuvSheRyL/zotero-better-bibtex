@@ -333,21 +333,21 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
         var a,archiveLocation;
         for (a in attachments) {
             var a_item = Zotero.Items.get(attachments[a]);
-            if (a_item.attachmentMIMEType == 'application/pdf' && a_item.attachmentPath.length>0) {
-              archiveLocation=a_item.key+'/'+a_item.attachmentPath.substring(8).trim()+':PDF';
+            if (a_item.attachmentMIMEType == 'application/pdf' && a_item.attachmentPath.length>0) {    //only pdf could be attached
+              archiveLocation=a_item.key+'/'+citekey.replace('bibtex:','','g').trim()+'.pdf:PDF';
               fulltext.push(archiveLocation);
             }
         }
         for (a in attachments) {
             var a_item = Zotero.Items.get(attachments[a]);
-            if (a_item.attachmentMIMEType == 'text/html' && a_item.attachmentPath.length>0) {
-              archiveLocation=a_item.key+'/'+a_item.attachmentPath.substring(8).trim()+':URL';
+            if (a_item.attachmentMIMEType == 'text/html' && a_item.attachmentPath.length>0) {    
+              archiveLocation=a_item.key+'/'+a_item.attachmentPath.replace('storage:','','g').trim()+':URL';
               fulltext.push(archiveLocation);
             }
         }
         archiveLocation=fulltext.join(";:").trim();
         item.setField('archiveLocation',archiveLocation.trim());
-        //这里不通过save函数来保存， 是有问题的，但是
+        //这里通过save函数来保存， 是有问题的,以后再改
         item.save({skipDateModifiedUpdate:true});
     }
     if (pin) {
