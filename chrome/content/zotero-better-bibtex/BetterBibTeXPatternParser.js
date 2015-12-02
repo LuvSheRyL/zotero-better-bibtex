@@ -226,7 +226,7 @@ BetterBibTeXPatternParser = (function() {
 
       peg$maxFailExpected.push(expected);
     }
-
+    //leoatchina, 我的乱码问题可能可以在这里搞定
     function peg$buildException(message, expected, pos) {
       function cleanupExpected(expected) {
         var i = 1;
@@ -249,7 +249,7 @@ BetterBibTeXPatternParser = (function() {
           }
         }
       }
-
+      //leoatchina, 我的乱码问题可能可以在这里搞定
       function buildMessage(expected, found) {
         function stringEscape(s) {
           function hex(ch) { return ch.charCodeAt(0).toString(16).toUpperCase(); }

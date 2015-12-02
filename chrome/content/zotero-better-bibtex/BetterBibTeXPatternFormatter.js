@@ -141,7 +141,7 @@ BetterBibTeXPatternFormatter = (function() {
   BetterBibTeXPatternFormatter.prototype.safechars = function(str) {
     return Zotero.Utilities.XRegExp.replace(str, this.re.unsafechars, '', 'all');
   };
-
+  //leoatchina
   BetterBibTeXPatternFormatter.prototype.words = function(str) {
     var word;
     return (function() {
@@ -159,7 +159,7 @@ BetterBibTeXPatternFormatter = (function() {
   };
 
   BetterBibTeXPatternFormatter.prototype.months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-
+  //leoatchina
   BetterBibTeXPatternFormatter.prototype.titleWords = function(title, options) {
     var word, words;
     if (options == null) {
@@ -197,7 +197,7 @@ BetterBibTeXPatternFormatter = (function() {
         results = [];
         for (i = 0, len = words.length; i < len; i++) {
           word = words[i];
-          if (this.skipWords.indexOf(word.toLowerCase()) < 0 && Zotero.BetterBibTeX.punycode.ucs2.decode(word).length > 1) {
+          if (this.skipWords.indexOf(word.toLowerCase()) < 0 && Zotero.BetterBibTeX.punycode.ucs2.decode(word).length > 1) { //important
             results.push(word);
           }
         }
