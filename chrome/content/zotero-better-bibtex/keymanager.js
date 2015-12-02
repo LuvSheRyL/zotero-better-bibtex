@@ -271,7 +271,7 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
     }
   };
 
-  _Class.prototype.save = function(item, citekey, archiveLocation) {
+  _Class.prototype.save = function(item, citekey) {
     var extra;
     if (!item.getField) {
       item = Zotero.Items.get(item.itemID);
@@ -282,14 +282,10 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
     }
     extra = extra.extra;
     if (citekey) {
-      extra += " bibtex:" + citekey;
+      extra += " bibtex:" + citekey.trim();
     }
-    item.setField('callNumber', extra.trim());
-
-    if (archiveLocation){
-      item.setField('archiveLocation', archiveLocation.trim());
-    }
-
+    extra = extra.trim();
+    item.setField('callNumber', extra);
     return item.save({
       skipDateModifiedUpdate: true
     });
@@ -350,10 +346,12 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
             }
         }
         archiveLocation=fulltext.join(";:").trim();
-        // jsdump(archiveLocation);
+        item.setField('archiveLocation',archiveLocation.trim());
+        //这里不通过save函数来保存， 是有问题的，但是
+        item.save({skipDateModifiedUpdate:true});
     }
     if (pin) {
-      this.save(item, citekey, archiveLocation);
+      this.save(item, citekey);
     }
     return this.verify(key);
   };
