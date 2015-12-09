@@ -15,7 +15,7 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
 
   _Class.prototype.andersJohanssonKeyRE = /\bbiblatexcitekey\[([^\]]+)\]/;
 
-  _Class.prototype.findKeysSQL = "select i.itemID as itemID, i.libraryID as libraryID, idv.value as extra from items i join itemData id on i.itemID = id.itemID join itemDataValues idv on idv.valueID = id.valueID join fields f on id.fieldID = f.fieldID where f.fieldName = 'callNumber' and not i.itemID in (select itemID from deletedItems) and (idv.value like '%bibtex:%' or idv.value like '%biblatexcitekey[%' or idv.value like '%biblatexcitekey{%')";
+  _Class.prototype.findKeysSQL = "select i.itemID as itemID, i.libraryID as libraryID, idv.value as extra from items i join itemData id on i.itemID = id.itemID join itemDataValues idv on idv.valueID = id.valueID join fields f on id.fieldID = f.fieldID where f.fieldName = 'extra' and not i.itemID in (select itemID from deletedItems) and (idv.value like '%bibtex:%' or idv.value like '%biblatexcitekey[%' or idv.value like '%biblatexcitekey{%')";
 
   _Class.prototype.integer = function(v) {
     var _v;
@@ -140,7 +140,7 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
         }
         item = {
           itemID: item.id,
-          extra: item.getField('callNumber')
+          extra: item.getField('extra')
         };
         break;
       case !!insitu:
@@ -282,10 +282,10 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
     }
     extra = extra.extra;
     if (citekey) {
-      extra += " bibtex:" + citekey.trim();
+      extra += " \nbibtex: " + citekey;
     }
     extra = extra.trim();
-    item.setField('callNumber', extra);
+    item.setField('extra', extra);
     return item.save({
       skipDateModifiedUpdate: true
     });
@@ -324,33 +324,6 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
         citekeyFormat: citekeyFormat
       };
       this.db.keys.insert(key);
-    }
-
-    //leoatchina:createArchiveLocation
-    if (item.isRegularItem()) { // not an attachment already
-        var fulltext = new Array;
-        var attachments = item.getAttachments(false);
-        var a,archiveLocation,extension;
-        for (a in attachments) {
-            var a_item = Zotero.Items.get(attachments[a]);
-            if (a_item.attachmentMIMEType == 'application/pdf' && a_item.attachmentPath.length>0) {    //only pdf could be attached
-              archiveLocation=a_item.key+'/'+citekey.replace('bibtex:','','g').trim()+'.pdf:PDF';
-              fulltext.push(archiveLocation);
-            }
-        }
-
-
-        for (a in attachments) {
-            var a_item = Zotero.Items.get(attachments[a]);
-            if (a_item.attachmentMIMEType == 'text/html' && a_item.attachmentPath.length>0) {    
-              archiveLocation=a_item.key+'/'+a_item.attachmentPath.replace('storage:','','g').trim()+':URL';
-              fulltext.push(archiveLocation);
-            }
-        }
-        archiveLocation=fulltext.join(";:").trim();
-        item.setField('archiveLocation',archiveLocation.trim());
-        //这里通过save函数来保存， 是有问题的,以后再改
-        item.save({skipDateModifiedUpdate:true});
     }
     if (pin) {
       this.save(item, citekey);
@@ -571,11 +544,3 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
   return _Class;
 
 })());
-
-
-
-function jsdump(str) {
-  Components.classes['@mozilla.org/consoleservice;1']
-            .getService(Components.interfaces.nsIConsoleService)
-            .logStringMessage(str);
-}

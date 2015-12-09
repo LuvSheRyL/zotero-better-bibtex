@@ -277,7 +277,7 @@ Zotero.BetterBibTeX.schomd.search = function(term) {
         libraryKey: item.libraryKey,
         title: item.getField('title'),
         date: item.getField('date'),
-        extra: item.getField('callNumber'),
+        extra: item.getField('extra'),
         creators: (function() {
           var j, len1, ref1, results2;
           ref1 = item.getCreators();

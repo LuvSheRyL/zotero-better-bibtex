@@ -868,7 +868,7 @@ Zotero.BetterBibTeX.init = function() {
   this.windowMediator = Components.classes['@mozilla.org/appshell/window-mediator;1'].getService(Components.interfaces.nsIWindowMediator);
   this.migrateData();
   if (this.pref.get('scanCitekeys')) {
-    this.flash('Citation key rescan', "Scanning 'callNumber' fields for fixed keys\nFor a large library, this might take a while");
+    this.flash('Citation key rescan', "Scanning 'extra' fields for fixed keys\nFor a large library, this might take a while");
     this.cache.reset('scanCitekeys');
     this.keymanager.reset();
     this.pref.set('scanCitekeys', false);
@@ -1335,7 +1335,7 @@ Zotero.BetterBibTeX.itemAdded = {
         continue;
       }
       try {
-        extra = JSON.parse(Zotero.Items.get(itemID).getField('callNumber').trim());
+        extra = JSON.parse(Zotero.Items.get(itemID).getField('extra').trim());
       } catch (error1) {
         error = error1;
         this.debug('no AUX scanner/import error info found on collection add');
