@@ -13,7 +13,6 @@
   <script src="chrome://zotero-better-bibtex/content/include.js"/>
   <script src="chrome://zotero-better-bibtex/content/BetterBibTeXPatternFormatter.js"/>
   <script src="chrome://zotero-better-bibtex/content/BetterBibTeXPatternParser.js"/>
-  <script src="chrome://zotero-better-bibtex/content/preferences.js"/><!-- needs to be included every time anew to bind windows and document -->
 
   <prefwindow id="zotero-prefs">
     <prefpane id="zotero-prefpane-better-bibtex"
@@ -38,7 +37,6 @@
         <preference name="extensions.zotero.translators.better-bibtex.keyConflictPolicy"        id="pref-better-bibtex-citekey-conflict"        type="string"/>
         <preference name="extensions.zotero.translators.better-bibtex.langid"                   id="pref-better-bibtex-langid"                  type="string"/>
         <preference name="extensions.zotero.translators.better-bibtex.pinCitekeys"              id="pref-better-bibtex-pin-citekeys"            type="string"/>
-        <preference name="extensions.zotero.translators.better-bibtex.preserveCaps"             id="pref-better-bibtex-preserveCaps"            type="string"/>
         <preference name="extensions.zotero.translators.better-bibtex.preserveBibTeXVariables"  id="pref-better-bibtex-preserveBibTeXVariables" type="bool"/>
         <preference name="extensions.zotero.translators.better-bibtex.rawImports"               id="pref-better-bibtex-raw-imports"             type="bool"/>
         <preference name="extensions.zotero.translators.better-bibtex.scanCitekeys"             id="pref-better-bibtex-rescan-citekeys"         type="bool"/>
@@ -141,14 +139,6 @@
                     </radiogroup>
                   </row>
                   <row>
-                    <label value="&zotero.better-bibtex.preserveCaps;"/>
-                    <radiogroup orient="vertical" preference="pref-better-bibtex-preserveCaps">
-                      <radio label="&zotero.better-bibtex.preserveCaps.inner;" value="inner"/>
-                      <radio label="&zotero.better-bibtex.preserveCaps.all;" value="all"/>
-                      <radio label="&zotero.better-bibtex.preserveCaps.no;" value="no"/>
-                    </radiogroup>
-                  </row>
-                  <row>
                     <checkbox label="&zotero.better-bibtex.preserveBibTeXVariables;" preference="pref-better-bibtex-preserveBibTeXVariables"/>
                     <label value="&zotero.better-bibtex.preserveBibTeXVariables.explain;"/>
                   </row>
@@ -235,4 +225,6 @@
       </tabbox>
     </prefpane>
   </prefwindow>
+
+  <script src="chrome://zotero-better-bibtex/content/preferences.js"/><!-- needs to be included every time anew to bind windows and document -->
 </overlay>

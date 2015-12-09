@@ -1,0 +1,444 @@
+Manifest-Version: 1.0
+
+Name: install.rdf
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: le5f+27LNT98qWNIb9KrVA==
+SHA1-Digest: 2vfUVvrWxnvqrGT47eFHCzpA1dk=
+
+Name: chrome.manifest
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: YdYQfNyrK1wlcU0I7TOcdg==
+SHA1-Digest: X9Pfi4zBb4vN7G5H3JP4sINmq1M=
+
+Name: chrome/content/zotero-better-bibtex/autoexport.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: JxBQFjdvMfP46j+2TOHwFg==
+SHA1-Digest: LVLBgFj0I5PTsUzU3OqTHCc5fD0=
+
+Name: chrome/content/zotero-better-bibtex/BetterBibTeXPatternFormatter.j
+ s
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: m2yDef1qixwHr7gf/zR9Sg==
+SHA1-Digest: HDKgcqkpIayyizwDFebTTCTJZZU=
+
+Name: chrome/content/zotero-better-bibtex/BetterBibTeXPatternParser.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: jXPs98NM9x3ilvh4DYV0SA==
+SHA1-Digest: nXquAkG42t0PSuvh9nPhcuwQYns=
+
+Name: chrome/content/zotero-better-bibtex/bulk-clear-confirm.xul
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: jIJ4ehpMWvgEkS4S+9h91Q==
+SHA1-Digest: SUj2h1AL+OhlqEI1CLgQOhsIdwc=
+
+Name: chrome/content/zotero-better-bibtex/cache.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: RYJCiAoUs1DnyIX+W4/Aww==
+SHA1-Digest: 1f5EZkDDw3miQvjZY8oi7znk89E=
+
+Name: chrome/content/zotero-better-bibtex/cayw.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: bUtaV2BmJtli4FMYPLaWxw==
+SHA1-Digest: u/NNYpsCPTyETKO+LhqPo/FeSJk=
+
+Name: chrome/content/zotero-better-bibtex/csl-localedata.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: ieTUVoOSqgWj5ndybEfgcg==
+SHA1-Digest: pkuy1IX7eqWaTX42wYf/MJUFCAU=
+
+Name: chrome/content/zotero-better-bibtex/db.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: i7EXY+fHXsTE/CiLs6RVWA==
+SHA1-Digest: CrcEdgIZonuZa+p3mMr97cTK6NU=
+
+Name: chrome/content/zotero-better-bibtex/debug-bridge.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: R5NfmeySmdyJ+kDZM0XCGA==
+SHA1-Digest: unmg1WQAIRc1gCHm76fV6A/dNCg=
+
+Name: chrome/content/zotero-better-bibtex/errorReport.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: zbzbhsh+DUJO3H4IX5AjUg==
+SHA1-Digest: YVDRPXAmG6d5KaeH4T5Bh/ICyUk=
+
+Name: chrome/content/zotero-better-bibtex/errorReport.xul
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: XMDf1x1yaYozu40EFH/EEg==
+SHA1-Digest: 4L/LvG/5UKXP7QbTDYAidumVRgU=
+
+Name: chrome/content/zotero-better-bibtex/exportOptions.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: VFbUQq6UY3AD86kOK4ynzA==
+SHA1-Digest: hkQR0m3zJtdn/yH3N8PJ4wRBufg=
+
+Name: chrome/content/zotero-better-bibtex/exportOptions.xul
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: l8uXbsC9027XpKCSpAmV4Q==
+SHA1-Digest: tckej+a3KxgmrbkshHdEkLvLECU=
+
+Name: chrome/content/zotero-better-bibtex/fold-to-ascii.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: zGD7fCvzj4KQeP62rgCKdw==
+SHA1-Digest: 4G4jImodADGJl6qTdkX2O4e+Tbk=
+
+Name: chrome/content/zotero-better-bibtex/include.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: HMfUZpA+gxLFGDBPR5xiHA==
+SHA1-Digest: r/ndmYlY2fv2m0vzttU+ZGRP6/Q=
+
+Name: chrome/content/zotero-better-bibtex/itemPane.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: veI0awUSqFyZpa8qpbyyYw==
+SHA1-Digest: tboXY25Zx/Rd8wtaBZhzw12TSOk=
+
+Name: chrome/content/zotero-better-bibtex/itemPane.xul
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: MhsYCHW7mbLRYhIWxNryKg==
+SHA1-Digest: uCGWzLwXD39qT5YerkTLDW9Swgc=
+
+Name: chrome/content/zotero-better-bibtex/keymanager.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: TswZPbARb08AblB82G26ng==
+SHA1-Digest: WV1asumTGbQN/Uh6nVBA0xhFiio=
+
+Name: chrome/content/zotero-better-bibtex/lokijs.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: MobFoEXlRMqBYU3wWrwySA==
+SHA1-Digest: k66NUC5YaTC1kBFKNizWgjt+Grw=
+
+Name: chrome/content/zotero-better-bibtex/preferences.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: wgwGXqty0LZa1aJ1hgWtyA==
+SHA1-Digest: y5naW5O/O2n1fpNS9tvAZGfClmM=
+
+Name: chrome/content/zotero-better-bibtex/preferences.xul
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: eOJE0rykREGvV4h/Xf3Y3Q==
+SHA1-Digest: uHgk6RCATFg3uYywLYeGXNhmXrk=
+
+Name: chrome/content/zotero-better-bibtex/punycode.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: Abh7mkyWpF7DOQkNIte9mg==
+SHA1-Digest: TNwahtW1GCMTmiwVKOxpVMheeVY=
+
+Name: chrome/content/zotero-better-bibtex/release.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: on4nYCXhMsu3l6ywYiSO7Q==
+SHA1-Digest: jwnk3c79WTUpLhrcHiqQEmWgqAk=
+
+Name: chrome/content/zotero-better-bibtex/schomd.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: r6N44WzhRGJaUiClfLuyEA==
+SHA1-Digest: OrNdT5EQnfkjDXxhb4rljW1t144=
+
+Name: chrome/content/zotero-better-bibtex/serialized.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: hJGr0EXoSwmi3haBSje5ng==
+SHA1-Digest: 9O87MDBPQoPDdqk7WZGM4PLdL7c=
+
+Name: chrome/content/zotero-better-bibtex/web-endpoints.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 7UPKU/2qMpOHaO/0gMuqaw==
+SHA1-Digest: HwdLEzEb7BXIK/x5/NOlpNdwm40=
+
+Name: chrome/content/zotero-better-bibtex/zotero-better-bibtex.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: TmaNy2P9045BO3grdWJ/oQ==
+SHA1-Digest: qzYnXtI81L8mkr8Ltk6D8t8x1g8=
+
+Name: chrome/content/zotero-better-bibtex/zoteroPane.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: c9AsMUJITZ2EYnDIGXh1XQ==
+SHA1-Digest: jGaR8Rm9AHDPAPLp4+G3bu+8YFU=
+
+Name: chrome/content/zotero-better-bibtex/zoteroPane.xul
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: H8fNXMg/UDTYnLCTFxkZ/Q==
+SHA1-Digest: 1u6LOdsVjNebLMN543k+nSoCNvI=
+
+Name: chrome/content/zotero-better-bibtex/test/include.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: JR1xCwjPYpcwn5qBNK5Kng==
+SHA1-Digest: /fYxJH8YMWwtjzsVwNmeFmrKiOg=
+
+Name: chrome/content/zotero-better-bibtex/test/results.xul
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 160jpfJCGpvPDw2QK/EdLA==
+SHA1-Digest: VaTWNfCQCV2i88Fk1h4WZ6EzWuM=
+
+Name: chrome/content/zotero-better-bibtex/test/setup.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: RLsTkVYjN5hD0OYCxDXtMA==
+SHA1-Digest: JqGgiQo3kTUvXbZ6tAMYJQIZnHA=
+
+Name: chrome/locale/en-US/zotero-better-bibtex/zotero-better-bibtex.dtd
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: ATiphSTpeBpg0T2Ntf4eTA==
+SHA1-Digest: D1SjahCdS7+qwdpuSro69sgnKVs=
+
+Name: chrome/locale/en-US/zotero-better-bibtex/zotero-better-bibtex.prop
+ erties
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: OxU0Ln6fhMV7jAI+QOzw1w==
+SHA1-Digest: V1AdZtiHroRpK58AdSFNkC7+JPY=
+
+Name: chrome/skin/default/zotero-better-bibtex/better-bibtex.svg
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 3m5tRHetE+/buK3vof+y9w==
+SHA1-Digest: Ecif4S0qhMFwOjimRXtYHdIG1q0=
+
+Name: chrome/skin/default/zotero-better-bibtex/bibtex.svg
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: Fo9bX5shERzohJea9TBIeQ==
+SHA1-Digest: LCGDfmaNzwtqcv63JZp8Fg/q8GY=
+
+Name: chrome/skin/default/zotero-better-bibtex/errorReport.css
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: pAK2AbK5iZWL9LudTIOlVw==
+SHA1-Digest: o8d5xC6l4mQ6jHhl7ZSbr5Px7Hs=
+
+Name: chrome/skin/default/zotero-better-bibtex/ic_done_24px.svg
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: IHa+H44RYgBczXnpz1eh9Q==
+SHA1-Digest: OjPCpMJPIkBSkVIeXKmtasoQ6jY=
+
+Name: chrome/skin/default/zotero-better-bibtex/ic_sync_24px.svg
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: Ae0+6/hTvrtvP/+wP8pooA==
+SHA1-Digest: 8DMj4Vyat/IYjM0rE4zbUxs+iG4=
+
+Name: chrome/skin/default/zotero-better-bibtex/ic_sync_disabled_24px.svg
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: o0CjieNtKBLTsr6GagzwUA==
+SHA1-Digest: fce8YGPF9o7rryYAGiLy6WTb57A=
+
+Name: chrome/skin/default/zotero-better-bibtex/ic_sync_problem_24px.svg
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: L2b8dxNg/uMEgsN82zewDQ==
+SHA1-Digest: 2rfgPM4MsYwD9Z62uyzqb/cLUqk=
+
+Name: chrome/skin/default/zotero-better-bibtex/ic_timer_24px.svg
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: JPj2/GejYBz4/QYRvsFbnA==
+SHA1-Digest: hGoEHThD15ks3Mv/lFTNgGW/n04=
+
+Name: chrome/skin/default/zotero-better-bibtex/itembox.css
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: q5xCorj/KyclCxnYUepjNg==
+SHA1-Digest: Jvo5QypRnXw/ajRbXmFbq7pCl94=
+
+Name: chrome/skin/default/zotero-better-bibtex/overlay.css
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 1B2M2Y8AsgTpgAmY7PhCfg==
+SHA1-Digest: 2jmj7l5rSw0yVb/vlWAYkK/YBwk=
+
+Name: chrome/skin/default/zotero-better-bibtex/preferences.css
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: XeWHppHN8NJbZDo2nFPzHQ==
+SHA1-Digest: 3F0vGjlMKTJXRgdji2YOfmknGCc=
+
+Name: chrome/skin/default/zotero-better-bibtex/auto-export/done.svg
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: kFIlegH0Qwc/j3133PIEvA==
+SHA1-Digest: Jaj7xNMDcewtNtiUhbSb/2OE5BY=
+
+Name: chrome/skin/default/zotero-better-bibtex/auto-export/error.svg
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: yQPaFdUlZe9o9HsaCjeSOw==
+SHA1-Digest: 5UhFGhC8QQtd4QQvfyFj/vmFRH0=
+
+Name: chrome/skin/default/zotero-better-bibtex/auto-export/pending.svg
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: Cj3B1wePA1AtxJ3s4xBn3w==
+SHA1-Digest: Dm5x45Zn2ndxLVknEpd5BXKheTg=
+
+Name: chrome/skin/default/zotero-better-bibtex/auto-export/running.svg
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: BizE6KYEV79f+gkTz6ccig==
+SHA1-Digest: Uyr5bu7cis58AOok3rv52QqXvyo=
+
+Name: defaults/preferences/defaults.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: r04btYNhUzN4q7d8z2bjVg==
+SHA1-Digest: rgZfrRXG8UBnS06YRBcy0yXJe7E=
+
+Name: resource/citeproc.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: KA1d48/Ksw6k13dCByoFYw==
+SHA1-Digest: 23jzP6nl2BpK76tEoLRxvqFvPQw=
+
+Name: resource/reports/cacheActivity.txt
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: s/RoR9kNWpr/XBW+m71jsw==
+SHA1-Digest: LSpajii0By6ho3e/MiS8UANwwwA=
+
+Name: resource/translators/Better BibLaTeX.header.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: bA41qxch+iAiN2lRDV36Ig==
+SHA1-Digest: VW5aT1wPYPoe4/GQRYt927zpz4M=
+
+Name: resource/translators/Better BibLaTeX.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: EVPmf5qi93k++9i3oSskOA==
+SHA1-Digest: AECbBTnkOKiP9MuAYuqxiGn4ysE=
+
+Name: resource/translators/Better BibLaTeX.json
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: HAGwGJmqNSa8b+bhes14NA==
+SHA1-Digest: BLAlqjRbC5cOV2mREeHHvHqvjtA=
+
+Name: resource/translators/Better BibTeX.header.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: jcoa42K0kR9MVTxxeNSbww==
+SHA1-Digest: SJQvaAwTg7Prw3Hde1ADhFV5NkE=
+
+Name: resource/translators/Better BibTeX.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: OUcSBy3Vhe23UCSjIyYNyA==
+SHA1-Digest: 3MZfuoRjDtigSCPuGYtIb2U9zOw=
+
+Name: resource/translators/Better BibTeX.json
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 5v4XtNv+tLR1YFHs3bJSEw==
+SHA1-Digest: dtysCc+tZoFSzqtl7MbVI9liSEM=
+
+Name: resource/translators/Better CSL JSON.header.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: JvRgu/7RVtOnDDl1Vn0WOA==
+SHA1-Digest: mQvubFNuzTsTKk69R37dOqlDHzo=
+
+Name: resource/translators/Better CSL JSON.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: Lmw7PpMiAGSUNg0g0cZf2A==
+SHA1-Digest: yFLWh4n9GC1YlUzV/XWiQojK7pc=
+
+Name: resource/translators/Better CSL JSON.json
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: ++CMtdYlRpTaCjlZ2dow1A==
+SHA1-Digest: eVRSzOny/arBSRvIFdoCuWt3Ol0=
+
+Name: resource/translators/BetterBibTeX JSON.header.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: WdVhbZgc8yx1ObckwL70UA==
+SHA1-Digest: Rj2H1oouUbd/PoOjXh8xlhJJV2c=
+
+Name: resource/translators/BetterBibTeX JSON.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: Ui6hjPOjRb9sPB+86Rb+7A==
+SHA1-Digest: Kbw0EYNEluqLei9lLcXAA135z64=
+
+Name: resource/translators/BetterBibTeX JSON.json
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: s4TmCDl5MjU6sle2lc69Wg==
+SHA1-Digest: C6sGtQIwrt9LslezSnPmtZc0Uqo=
+
+Name: resource/translators/BetterBibTeXBraceBalancer.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 1icpjGpdeRfMqqC6hZK6jg==
+SHA1-Digest: z843buT5x0Zl+/11o3cx6aiOaok=
+
+Name: resource/translators/BetterBibTeXMarkupParser.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: oq679hhd/p4ErV8Gn1Wgrw==
+SHA1-Digest: mVe5R2TW26KUjlJMkuqRssrCxHE=
+
+Name: resource/translators/BetterBibTeXParser.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: v/WnKaOtgYgYK4nAd025OA==
+SHA1-Digest: T8fDZuh8BrVZKn6/UCZAZCKKw4c=
+
+Name: resource/translators/BetterBibTeXParserSupport.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: wlhQ1DeL0KJS9SbT5PDsag==
+SHA1-Digest: p/FxVY6usaYt57LI8JiraHFsrfA=
+
+Name: resource/translators/BibTeXAuxScanner.header.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 469jN/NOKWb8/qgy0N9X/g==
+SHA1-Digest: +d4dssYAYXIa++Hvx3RaScRHA44=
+
+Name: resource/translators/BibTeXAuxScanner.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: aXV0IVgkSsL2Dp6JLzevOQ==
+SHA1-Digest: gUt3pBbJtzOMOM7pW2uGMWfIFak=
+
+Name: resource/translators/BibTeXAuxScanner.json
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: XxrxwAH5/PaSQGQYIZyU+g==
+SHA1-Digest: 5nYwhRGkqdQfgsodCwix6hb8hgc=
+
+Name: resource/translators/Collected Notes.header.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: wOfqt/bE8qVPAQWz08TQiQ==
+SHA1-Digest: sz+S8owyIIOLAvmyodst9RMLyg0=
+
+Name: resource/translators/Collected Notes.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 58ErfIib3iLKn+J5be5AdA==
+SHA1-Digest: nmlgFmQB8LV9P11fsSaGuEmnFjo=
+
+Name: resource/translators/Collected Notes.json
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: fckZOejVe83KwPOnqqn28w==
+SHA1-Digest: UoLtUx7SiENB7R9qWud0Dx09D14=
+
+Name: resource/translators/json5.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: IoxDa7S4o731EKqmIBe9jg==
+SHA1-Digest: 5DFAz//InqvDgSB2/bF9g15oYkw=
+
+Name: resource/translators/LaTeX Citation.header.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 2ICjasnWtaXKC6cdICWGMw==
+SHA1-Digest: 1jIylfsI21E2QoVc1ZODpvVlrVw=
+
+Name: resource/translators/LaTeX Citation.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: MqyQ+YbNiTlPeqVUBFNq2A==
+SHA1-Digest: 20ZXhD/BtR9GeH+xLJvpqkI3yUw=
+
+Name: resource/translators/LaTeX Citation.json
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: +9ewrS06YyN3K5l6p70+rg==
+SHA1-Digest: 0T/QP7UrMNtAeXMBxSSXfe6arOY=
+
+Name: resource/translators/latex_unicode_mapping.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: S6pUqua2YB/8AX3Y730ZTQ==
+SHA1-Digest: MhJcBogTlBY23Z/xWbSZJtJM6yY=
+
+Name: resource/translators/Pandoc Citation.header.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: vlO88FLyQT95PKqQoh7XYw==
+SHA1-Digest: Lk+6HSPRzayaIetTJ9SYJp3UfRQ=
+
+Name: resource/translators/Pandoc Citation.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: f+9Ll8qRGx/IDAl07fN+aw==
+SHA1-Digest: mFDJFWqOuuQ7TzFdwbAfDjE5fUQ=
+
+Name: resource/translators/Pandoc Citation.json
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 5dwol2qPrUHT0ZXhTICGlw==
+SHA1-Digest: Dzrixkk7pPOIS42KQzKY4B4FANI=
+
+Name: resource/translators/reference.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: fXDGGshDfXSYJUlR6bWibg==
+SHA1-Digest: nSBENRka0e1K5jCdypLmrliSgBc=
+
+Name: resource/translators/translator.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: vA3LOITD+deX71Ne4EXvLg==
+SHA1-Digest: wEgtADyj7t7mcFsCnUBk138qTAg=
+
+Name: resource/translators/unicode_translator.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: 0Alos/cOSoKP9ZxiaP5PHQ==
+SHA1-Digest: ZaUf/JtwI8pE2kB7/bt+xumoG9w=
+
+Name: resource/translators/xregexp-all.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: XHV+IysOupYYSts+lhHQzw==
+SHA1-Digest: O6Jd12S6LgTP7nNi5yShbkewenk=
+

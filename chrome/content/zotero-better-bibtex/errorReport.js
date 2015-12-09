@@ -117,7 +117,7 @@ Zotero_BetterBibTeX_ErrorReport = new ((function() {
         ps.alert(null, Zotero.getString('general.error'), Zotero.getString('errorReport.noNetworkConnection') + ': ' + (request != null ? request.status : void 0));
         break;
       case request.status === parseInt(this.form.fields.success_action_status):
-        ps.alert(null, Zotero.getString('general.error'), Zotero.getString('errorReport.invalidResponseRepository') + ': ' + request.status + ': ' + request.responseText);
+        ps.alert(null, Zotero.getString('general.error'), Zotero.getString('errorReport.invalidResponseRepository') + (": " + request.status + ", expected " + this.form.fields.success_action_status + "\n" + request.responseText));
         break;
       default:
         return true;

@@ -120,6 +120,9 @@ BetterBibTeXPatternFormatter = (function() {
     if (!value) {
       value = '';
     }
+    if (step.scrub) {
+      value = this.clean(value);
+    }
     ref = step.filters || [];
     for (i = 0, len = ref.length; i < len; i++) {
       filter = ref[i];
@@ -127,9 +130,6 @@ BetterBibTeXPatternFormatter = (function() {
       if (!value) {
         value = '';
       }
-    }
-    if (step.scrub) {
-      value = this.clean(value);
     }
     return value;
   };

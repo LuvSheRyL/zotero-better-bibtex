@@ -5,8 +5,8 @@
  *
  * The global Translator object allows access to the current configuration of the translator
  *
- * @param {enum} preserveCaps whether capitals should be preserved by bracing then with {}. Values: none, all, inner
- * @param {boolean} fancyURLs set to true when BBT will generate \url{..} around the urls
+ * @param {enum} titleCase whether titles should be title-cased
+ * @param {boolean} bibtexURLs set to true when BBT will generate \url{..} around the urls for BibTeX
  */
 
 /*
@@ -27,23 +27,41 @@
  *   * bibtex: the LaTeX-encoded value of the field
  *   * enc: the encoding to use for the field
  */
-var Reference,
+var Language, Reference,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
   hasProp = {}.hasOwnProperty;
 
 Reference = (function() {
   function Reference(item) {
-    var attr, f, ref1, ref2;
+    var attr, f, langlc, ref1, ref2, ref3, sim;
     this.item = item;
     this.fields = [];
     this.has = Object.create(null);
     this.raw = (ref1 = Translator.rawLaTag, indexOf.call(this.item.tags, ref1) >= 0);
+    if (!this.item.language) {
+      this.english = true;
+    } else {
+      langlc = this.item.language.toLowerCase();
+      this.language = Language.babelMap[langlc.replace(/[^a-z0-9]/, '_')];
+      this.language || (this.language = Language.babelMap[langlc.replace(/-[a-z]+$/i, '').replace(/[^a-z0-9]/, '_')]);
+      if (this.language) {
+        this.language = this.language[0];
+      } else {
+        sim = Language.lookup(langlc);
+        if (sim[0].sim >= 0.9) {
+          this.language = sim[0].lang;
+        } else {
+          delete this.language;
+        }
+      }
+      this.english = (ref2 = this.language) === 'american' || ref2 === 'british' || ref2 === 'canadian' || ref2 === 'english' || ref2 === 'australian' || ref2 === 'newzealand' || ref2 === 'USenglish' || ref2 === 'UKenglish';
+    }
     this.referencetype = Translator.typeMap.Zotero2BibTeX[this.item.itemType] || 'misc';
     this.override = Translator.extractFields(this.item);
-    ref2 = Translator.fieldMap || {};
-    for (attr in ref2) {
-      if (!hasProp.call(ref2, attr)) continue;
-      f = ref2[attr];
+    ref3 = Translator.fieldMap || {};
+    for (attr in ref3) {
+      if (!hasProp.call(ref3, attr)) continue;
+      f = ref3[attr];
       if (f.name) {
         this.add(this.clone(f, this.item[attr]));
       }
@@ -151,16 +169,17 @@ Reference = (function() {
    * Encode to LaTeX url
    *
    * @param {field} field to encode
-   * @return {String} field.value encoded as verbatim LaTeX string (minimal escaping). If preference `fancyURLs` is on, wraps return value in `\url{string}`
+   * @return {String} field.value encoded as verbatim LaTeX string (minimal escaping). If in Better BibTeX, wraps return value in `\url{string}`
    */
 
   Reference.prototype.enc_url = function(f) {
     var value;
     value = this.enc_verbatim(f);
-    if (Translator.fancyURLs) {
-      return "\\url{" + value + "}";
+    if (Translator.BetterBibTeX) {
+      return "\\url{" + (this.enc_verbatim(f)) + "}";
+    } else {
+      return value;
     }
-    return value;
   };
 
 
@@ -398,7 +417,9 @@ Reference = (function() {
     if (raw) {
       return f.value;
     }
-    value = LaTeX.text2latex(f.value);
+    value = LaTeX.text2latex(f.value, {
+      autoCase: f.autoCase && this.english
+    });
     if (f.value instanceof String) {
       value = new String("{" + value + "}");
     }
@@ -549,15 +570,10 @@ Reference = (function() {
     })()).join(';');
   };
 
-  Reference.prototype.preserveCaps = {
-    inner: new XRegExp("(^|[\\s\\p{Punctuation}])([^\\s\\p{Punctuation}]+\\p{Uppercase_Letter}[^\\s\\p{Punctuation}]*)", 'g'),
-    all: new XRegExp("(^|[\\s\\p{Punctuation}])([^\\s\\p{Punctuation}]*\\p{Uppercase_Letter}[^\\s\\p{Punctuation}]*)", 'g')
-  };
-
-  Reference.prototype.initialCapOnly = new XRegExp("^\\p{Uppercase_Letter}\\p{Lowercase_Letter}+$");
+  Reference.prototype.isBibVarRE = /^[a-z][a-z0-9_]*$/i;
 
   Reference.prototype.isBibVar = function(value) {
-    return value && Translator.preserveBibTeXVariables && value.match(/^[a-z][a-z0-9_]*$/i);
+    return Translator.preserveBibTeXVariables && value && typeof value === 'string' && this.isBibVarRE.test(value);
   };
 
 
@@ -571,7 +587,7 @@ Reference = (function() {
    */
 
   Reference.prototype.add = function(field) {
-    var braced, enc, i, j, ref1, ref2, scan, value;
+    var enc, ref1, value;
     if (!field.bibtex) {
       if (typeof field.value !== 'number' && !field.value) {
         return;
@@ -590,6 +606,11 @@ Reference = (function() {
       throw "duplicate field '" + field.name + "' for " + this.item.__citekey__;
     }
     if (!field.bibtex) {
+      Translator.debug('add:', {
+        field: field,
+        preserve: Translator.preserveBibTeXVariables,
+        match: this.isBibVar(field.value)
+      });
       if (typeof field.value === 'number' || (field.preserveBibTeXVariables && this.isBibVar(field.value))) {
         value = field.value;
       } else {
@@ -599,51 +620,6 @@ Reference = (function() {
           return;
         }
         if (!(field.bare && !field.value.match(/\s/))) {
-          if (Translator.preserveCaps !== 'no' && field.preserveCaps && !this.raw) {
-            braced = [];
-            scan = value.replace(/\\./, '..');
-            for (i = j = 0, ref2 = value.length; 0 <= ref2 ? j < ref2 : j > ref2; i = 0 <= ref2 ? ++j : --j) {
-              braced[i] = braced[i - 1] || 0;
-              braced[i] += (function() {
-                switch (scan[i]) {
-                  case '{':
-                    return 1;
-                  case '}':
-                    return -1;
-                  default:
-                    return 0;
-                }
-              })();
-              if (braced[i] < 0) {
-                braced[i] = 0;
-              }
-            }
-            value = XRegExp.replace(value, this.preserveCaps[Translator.preserveCaps], function(match, boundary, needle, pos, haystack) {
-              var c, l, ref3;
-              if (boundary == null) {
-                boundary = '';
-              }
-              pos += boundary.length;
-              if (pos === 0 && Translator.preserveCaps === 'all' && XRegExp.test(needle, Reference.prototype.initialCapOnly)) {
-                return boundary + needle;
-              }
-              c = 0;
-              for (i = l = ref3 = pos - 1; l >= 0; i = l += -1) {
-                if (haystack[i] === '\\') {
-                  c++;
-                } else {
-                  break;
-                }
-              }
-              if (c % 2 === 1) {
-                return boundary + needle;
-              }
-              if (braced[pos] > 0) {
-                return boundary + needle;
-              }
-              return boundary + "{" + needle + "}";
-            });
-          }
           value = "{" + value + "}";
         }
       }
@@ -691,7 +667,7 @@ Reference = (function() {
   Reference.prototype.postscript = function() {};
 
   Reference.prototype.complete = function() {
-    var cslvar, err, error, field, fields, j, l, len, len1, name, raw, ref, ref1, ref2, ref3, remapped, value;
+    var autoCase, cslvar, err, error, field, fields, j, l, len, len1, mapped, name, raw, ref, ref1, ref2, ref3, value;
     if (Translator.DOIandURL !== 'both') {
       if (this.has.doi && this.has.url) {
         switch (Translator.DOIandURL) {
@@ -709,26 +685,27 @@ Reference = (function() {
       if (!hasProp.call(ref1, name)) continue;
       value = ref1[name];
       raw = ((ref2 = value.format) === 'naive' || ref2 === 'json');
-      name = name.toLowerCase();
       if (name === 'referencetype') {
         this.referencetype = value.value;
         continue;
       }
-      if (name === 'pmid' || name === 'pmcid') {
+      if (name === 'PMID' || name === 'PMCID') {
         value.format = 'key-value';
+        name = name.toLowerCase();
       }
       if (value.format === 'csl') {
         cslvar = Translator.CSLVariables[name];
-        remapped = cslvar != null ? cslvar[(Translator.BetterBibLaTeX ? 'BibLaTeX' : 'BibTeX')] : void 0;
-        if (typeof remapped === 'function') {
-          remapped = remapped.call(this);
+        mapped = cslvar[(Translator.BetterBibLaTeX ? 'BibLaTeX' : 'BibTeX')];
+        if (typeof mapped === 'function') {
+          mapped = mapped.call(this);
         }
-        if (remapped) {
+        autoCase = name === 'title' || name === 'shorttitle' || name === 'origtitle' || name === 'booktitle' || name === 'maintitle';
+        if (mapped) {
           fields.push({
-            name: remapped,
+            name: mapped,
             value: value.value,
-            enc: (cslvar.type === 'creator' ? 'creators' : cslvar.type),
-            raw: raw
+            autoCase: autoCase,
+            enc: (cslvar.type === 'creator' ? 'creators' : cslvar.type)
           });
         } else {
           Translator.debug('Unmapped CSL field', name, '=', value.value);
@@ -897,3 +874,184 @@ Reference = (function() {
   return Reference;
 
 })();
+
+Language = new ((function() {
+  function _Class() {
+    var j, k, key, lang, len, ref1, ref2, v, value;
+    this.babelMap = {
+      af: 'afrikaans',
+      am: 'amharic',
+      ar: 'arabic',
+      ast: 'asturian',
+      bg: 'bulgarian',
+      bn: 'bengali',
+      bo: 'tibetan',
+      br: 'breton',
+      ca: 'catalan',
+      cop: 'coptic',
+      cy: 'welsh',
+      cz: 'czech',
+      da: 'danish',
+      de_1996: 'ngerman',
+      de_at_1996: 'naustrian',
+      de_at: 'austrian',
+      de_de_1996: 'ngerman',
+      de: ['german', 'germanb'],
+      dsb: ['lsorbian', 'lowersorbian'],
+      dv: 'divehi',
+      el: 'greek',
+      el_polyton: 'polutonikogreek',
+      en_au: 'australian',
+      en_ca: 'canadian',
+      en: 'english',
+      en_gb: ['british', 'ukenglish'],
+      en_nz: 'newzealand',
+      en_us: ['american', 'usenglish'],
+      eo: 'esperanto',
+      es: 'spanish',
+      et: 'estonian',
+      eu: 'basque',
+      fa: 'farsi',
+      fi: 'finnish',
+      fr_ca: ['acadian', 'canadian', 'canadien'],
+      fr: ['french', 'francais'],
+      fur: 'friulan',
+      ga: 'irish',
+      gd: ['scottish', 'gaelic'],
+      gl: 'galician',
+      he: 'hebrew',
+      hi: 'hindi',
+      hr: 'croatian',
+      hsb: ['usorbian', 'uppersorbian'],
+      hu: 'magyar',
+      hy: 'armenian',
+      ia: 'interlingua',
+      id: ['indonesian', 'bahasa', 'bahasai', 'indon', 'meyalu'],
+      is: 'icelandic',
+      it: 'italian',
+      ja: 'japanese',
+      kn: 'kannada',
+      la: 'latin',
+      lo: 'lao',
+      lt: 'lithuanian',
+      lv: 'latvian',
+      ml: 'malayalam',
+      mn: 'mongolian',
+      mr: 'marathi',
+      nb: ['norsk', 'bokmal'],
+      nl: 'dutch',
+      nn: 'nynorsk',
+      no: ['norwegian', 'norsk'],
+      oc: 'occitan',
+      pl: 'polish',
+      pms: 'piedmontese',
+      pt_br: ['brazil', 'brazilian'],
+      pt: ['portuguese', 'portuges'],
+      pt_pt: 'portuguese',
+      rm: 'romansh',
+      ro: 'romanian',
+      ru: 'russian',
+      sa: 'sanskrit',
+      se: 'samin',
+      sk: 'slovak',
+      sl: ['slovenian', 'slovene'],
+      sq_al: 'albanian',
+      sr_cyrl: 'serbianc',
+      sr_latn: 'serbian',
+      sr: 'serbian',
+      sv: 'swedish',
+      syr: 'syriac',
+      ta: 'tamil',
+      te: 'telugu',
+      th: ['thai', 'thaicjk'],
+      tk: 'turkmen',
+      tr: 'turkish',
+      uk: 'ukrainian',
+      ur: 'urdu',
+      vi: 'vietnamese',
+      zh_latn: 'pinyin',
+      zh: 'pinyin',
+      zlm: ['malay', 'bahasam', 'melayu']
+    };
+    ref1 = this.babelMap;
+    for (key in ref1) {
+      if (!hasProp.call(ref1, key)) continue;
+      value = ref1[key];
+      if (typeof value === 'string') {
+        this.babelMap[key] = [value];
+      }
+    }
+    this.babelList = [];
+    ref2 = this.babelMap;
+    for (k in ref2) {
+      if (!hasProp.call(ref2, k)) continue;
+      v = ref2[k];
+      for (j = 0, len = v.length; j < len; j++) {
+        lang = v[j];
+        if (this.babelList.indexOf(lang) < 0) {
+          this.babelList.push(lang);
+        }
+      }
+    }
+    this.cache = Object.create(null);
+  }
+
+  return _Class;
+
+})());
+
+Language.get_bigrams = function(string) {
+  var i, s;
+  s = string.toLowerCase();
+  s = (function() {
+    var j, ref1, results;
+    results = [];
+    for (i = j = 0, ref1 = s.length; 0 <= ref1 ? j < ref1 : j > ref1; i = 0 <= ref1 ? ++j : --j) {
+      results.push(s.slice(i, i + 2));
+    }
+    return results;
+  })();
+  s.sort();
+  return s;
+};
+
+Language.string_similarity = function(str1, str2) {
+  var hit_count, pairs1, pairs2, union;
+  pairs1 = this.get_bigrams(str1);
+  pairs2 = this.get_bigrams(str2);
+  union = pairs1.length + pairs2.length;
+  hit_count = 0;
+  while (pairs1.length > 0 && pairs2.length > 0) {
+    if (pairs1[0] === pairs2[0]) {
+      hit_count++;
+      pairs1.shift();
+      pairs2.shift();
+      continue;
+    }
+    if (pairs1[0] < pairs2[0]) {
+      pairs1.shift();
+    } else {
+      pairs2.shift();
+    }
+  }
+  return (2 * hit_count) / union;
+};
+
+Language.lookup = function(langcode) {
+  var j, lc, len, ref1;
+  if (!this.cache[langcode]) {
+    this.cache[langcode] = [];
+    ref1 = Language.babelList;
+    for (j = 0, len = ref1.length; j < len; j++) {
+      lc = ref1[j];
+      this.cache[langcode].push({
+        lang: lc,
+        sim: this.string_similarity(langcode, lc)
+      });
+    }
+    this.cache[langcode].sort(function(a, b) {
+      return b.sim - a.sim;
+    });
+  }
+  return this.cache[langcode];
+};

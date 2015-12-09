@@ -5,36 +5,29 @@ var JabRef, ZoteroItem, attr, base, detectImport, doExport, doImport, f, field, 
 Translator.fieldMap = {
   place: {
     name: 'address',
-    preserveCaps: true,
     "import": 'location'
   },
   section: {
-    name: 'chapter',
-    preserveCaps: true
+    name: 'chapter'
   },
   edition: {
-    name: 'edition',
-    preserveCaps: true
+    name: 'edition'
   },
   type: {
-    name: 'type',
-    preserveCaps: true
+    name: 'type'
   },
   series: {
-    name: 'series',
-    preserveCaps: true
+    name: 'series'
   },
   title: {
     name: 'title',
-    preserveCaps: true
+    autoCase: true
   },
   volume: {
-    name: 'volume',
-    preserveCaps: true
+    name: 'volume'
   },
   rights: {
-    name: 'copyright',
-    preserveCaps: true
+    name: 'copyright'
   },
   ISBN: {
     name: 'isbn'
@@ -47,10 +40,7 @@ Translator.fieldMap = {
   },
   shortTitle: {
     name: 'shorttitle',
-    preserveCaps: true
-  },
-  url: {
-    name: 'url'
+    autoCase: true
   },
   DOI: {
     name: 'doi'
@@ -99,7 +89,7 @@ Translator.fieldEncoding = {
 months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 
 doExport = function() {
-  var authors, collaborators, creator, date, editors, i, item, j, len, len1, note, pages, primaryCreatorType, ref, ref1, ref2, ref3, ref4, translators;
+  var authors, collaborators, creator, date, editors, i, item, j, len, len1, note, pages, primaryCreatorType, ref, ref1, ref2, ref3, ref4, ref5, translators;
   Zotero.write('\n');
   while (item = Translator.nextItem()) {
     ref = new Reference(item);
@@ -111,11 +101,27 @@ doExport = function() {
       name: 'urldate',
       value: item.accessDate && item.accessDate.replace(/\s*T?\d+:\d+:\d+.*/, '')
     });
+    if (Translator.bibtexURLs) {
+      if ((ref1 = ref.referencetype) === 'misc' || ref1 === 'booklet') {
+        ref.add({
+          name: 'howpublished',
+          value: item.url,
+          enc: 'url'
+        });
+      } else {
+        ref.add({
+          name: 'note',
+          allowDuplicates: true,
+          value: item.url,
+          enc: 'url'
+        });
+      }
+    }
     switch (false) {
-      case (ref1 = item.itemType) !== 'bookSection' && ref1 !== 'conferencePaper':
+      case (ref2 = item.itemType) !== 'bookSection' && ref2 !== 'conferencePaper':
         ref.add({
           name: 'booktitle',
-          preserveCaps: true,
+          autoCase: true,
           value: item.publicationTitle,
           preserveBibTeXVariables: true
         });
@@ -131,7 +137,6 @@ doExport = function() {
         ref.add({
           name: 'journal',
           value: Translator.useJournalAbbreviation && Zotero.BetterBibTeX.keymanager.journalAbbrev(item) || item.publicationTitle,
-          preserveCaps: true,
           preserveBibTeXVariables: true
         });
     }
@@ -139,15 +144,13 @@ doExport = function() {
       case 'thesis':
         ref.add({
           name: 'school',
-          value: item.publisher,
-          preserveCaps: true
+          value: item.publisher
         });
         break;
       case 'report':
         ref.add({
           name: 'institution',
-          value: item.publisher,
-          preserveCaps: true
+          value: item.publisher
         });
         break;
       default:
@@ -157,7 +160,7 @@ doExport = function() {
           enc: 'literal'
         });
     }
-    if (item.itemType === 'thesis' && ((ref2 = item.thesisType) === 'mastersthesis' || ref2 === 'phdthesis')) {
+    if (item.itemType === 'thesis' && ((ref3 = item.thesisType) === 'mastersthesis' || ref3 === 'phdthesis')) {
       ref.referencetype = item.thesisType;
       ref.remove('type');
     }
@@ -167,9 +170,9 @@ doExport = function() {
       translators = [];
       collaborators = [];
       primaryCreatorType = Zotero.Utilities.getCreatorsForType(item.itemType)[0];
-      ref3 = item.creators;
-      for (i = 0, len = ref3.length; i < len; i++) {
-        creator = ref3[i];
+      ref4 = item.creators;
+      for (i = 0, len = ref4.length; i < len; i++) {
+        creator = ref4[i];
         switch (creator.creatorType) {
           case 'editor':
           case 'seriesEditor':
@@ -211,8 +214,7 @@ doExport = function() {
       if (date.literal || date.year_end) {
         ref.add({
           name: 'year',
-          value: item.date,
-          preserveCaps: true
+          value: item.date
         });
       } else {
         if (date.month) {
@@ -249,9 +251,9 @@ doExport = function() {
       });
     }
     if (item.notes && Translator.exportNotes) {
-      ref4 = item.notes;
-      for (j = 0, len1 = ref4.length; j < len1; j++) {
-        note = ref4[j];
+      ref5 = item.notes;
+      for (j = 0, len1 = ref5.length; j < len1; j++) {
+        note = ref5[j];
         ref.add({
           name: 'annote',
           value: Zotero.Utilities.unescapeHTML(note.note),
@@ -420,7 +422,7 @@ for (attr in ref1) {
 }
 
 ZoteroItem.prototype["import"] = function(bibtex) {
-  var att, biblatexdata, creator, hackyFields, j, k, key, keys, keywords, kw, l, len1, len2, month, o, ref2, value;
+  var att, biblatexdata, creator, hackyFields, j, k, key, keys, keywords, kw, l, len1, len2, m, month, o, ref2, value;
   hackyFields = [];
   for (field in bibtex) {
     if (!hasProp.call(bibtex, field)) continue;
@@ -562,8 +564,11 @@ ZoteroItem.prototype["import"] = function(bibtex) {
       case 'note':
         this.addToExtra(value);
         break;
+      case 'url':
       case 'howpublished':
-        if (/^(https?:\/\/|mailto:)/i.test(value)) {
+        if (m = value.match(/^(\\url{)(https?:\/\/|mailto:)}$/i)) {
+          this.item.url = m[2];
+        } else if (field === 'url' || /^(https?:\/\/|mailto:)/i.test(value)) {
           this.item.url = value;
         } else {
           this.addToExtraData(field, value);
@@ -660,10 +665,10 @@ ZoteroItem.prototype["import"] = function(bibtex) {
       switch (false) {
         case !(this.biblatexdatajson && Translator.testing):
           return 'bibtex{' + ((function() {
-            var len3, m, results;
+            var len3, n, results;
             results = [];
-            for (m = 0, len3 = keys.length; m < len3; m++) {
-              k = keys[m];
+            for (n = 0, len3 = keys.length; n < len3; n++) {
+              k = keys[n];
               o = {};
               o[k] = this.biblatexdata[k];
               results.push(JSON5.stringify(o).slice(1, -1));
@@ -674,10 +679,10 @@ ZoteroItem.prototype["import"] = function(bibtex) {
           return "bibtex" + (JSON5.stringify(this.biblatexdata));
         default:
           return biblatexdata = 'bibtex[' + ((function() {
-            var len3, m, results;
+            var len3, n, results;
             results = [];
-            for (m = 0, len3 = keys.length; m < len3; m++) {
-              key = keys[m];
+            for (n = 0, len3 = keys.length; n < len3; n++) {
+              key = keys[n];
               results.push(key + "=" + this.biblatexdata[key]);
             }
             return results;

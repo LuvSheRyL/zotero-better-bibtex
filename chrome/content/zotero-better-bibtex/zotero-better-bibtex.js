@@ -18,6 +18,26 @@ Zotero.BetterBibTeX = {
   })
 };
 
+Components.utils["import"]('resource://zotero-better-bibtex/citeproc.js', Zotero.BetterBibTeX);
+
+Zotero.BetterBibTeX.titleCase = {
+  state: {
+    opt: {
+      lang: 'en'
+    },
+    locale: {
+      en: {
+        opts: {
+          'skip-words': Zotero.BetterBibTeX.CSL.SKIP_WORDS,
+          'leading-noise-words': 'a,an,the'
+        }
+      }
+    }
+  }
+};
+
+Zotero.BetterBibTeX.titleCase.state.locale.en.opts['skip-words-regexp'] = new RegExp('(?:(?:[?!:]*\\s+|-|^)(?:' + Zotero.BetterBibTeX.titleCase.state.locale.en.opts['skip-words'].slice().join('|') + ')(?=[!?:]*\\s+|-|$))', 'g');
+
 Zotero.BetterBibTeX.HTMLParser = new ((function() {
   function _Class() {}
 
@@ -58,24 +78,38 @@ Zotero.BetterBibTeX.HTMLParser = new ((function() {
   };
 
   _Class.prototype.walk = function(node, json) {
-    var attr, child, j, l, len, ref, ref1, ref2, tag;
+    var attr, child, cls, j, l, len, len1, n, ref, ref1, ref2, ref3, tag;
     tag = {
       name: node.nodeName.toLowerCase(),
       attrs: {},
+      "class": {},
       children: []
     };
     if ((ref = node.nodeType) === this.TEXT_NODE || ref === this.CDATA_SECTION_NODE) {
       tag.text = node.textContent;
     } else {
+      if (tag.name === 'script') {
+        tag.text = node.text;
+      }
       if (node.nodeType === this.ELEMENT_NODE && node.hasAttributes()) {
         ref1 = node.attributes;
         for (j = 0, len = ref1.length; j < len; j++) {
           attr = ref1[j];
           tag.attrs[attr.name] = attr.value;
         }
+        if (tag.attrs["class"]) {
+          ref2 = tag.attrs["class"].split(/\s+/);
+          for (l = 0, len1 = ref2.length; l < len1; l++) {
+            cls = ref2[l];
+            if (!cls) {
+              continue;
+            }
+            tag["class"][cls] = true;
+          }
+        }
       }
       if (node.childNodes) {
-        for (child = l = 0, ref2 = node.childNodes.length; 0 <= ref2 ? l < ref2 : l > ref2; child = 0 <= ref2 ? ++l : --l) {
+        for (child = n = 0, ref3 = node.childNodes.length; 0 <= ref3 ? n < ref3 : n > ref3; child = 0 <= ref3 ? ++n : --n) {
           this.walk(node.childNodes.item(child), tag);
         }
       }
@@ -228,7 +262,7 @@ Zotero.BetterBibTeX.DateParser = (function() {
         circa: (m[3] === '?' ? true : void 0)
       };
     }
-    if (m = date.match(/^(([0-9]{1,2})[-\s\/])?([0-9]{1,2})[-\s\/]([0-9]{3,4})(\?)?(~)?$/)) {
+    if (m = date.match(/^(([0-9]{1,2})[-\.\s\/])?([0-9]{1,2})[-\.\s\/]([0-9]{3,4})(\?)?(~)?$/)) {
       parsed = {
         year: parseInt(m[4]),
         month: parseInt(m[3]),
@@ -239,7 +273,7 @@ Zotero.BetterBibTeX.DateParser = (function() {
       this.swapMonth(parsed, 'mdy');
       return parsed;
     }
-    if (m = date.match(/^(-?[0-9]{3,4})[-\s\/]([0-9]{1,2})([-\s\/]([0-9]{1,2}))?(\?)?(~)?$/)) {
+    if (m = date.match(/^(-?[0-9]{3,4})[-\.\s\/]([0-9]{1,2})([-\.\s\/]([0-9]{1,2}))?(\?)?(~)?$/)) {
       parsed = {
         year: this.year(m[1]),
         month: parseInt(m[2]),
@@ -250,7 +284,7 @@ Zotero.BetterBibTeX.DateParser = (function() {
       this.swapMonth(parsed);
       return parsed;
     }
-    parsed = Zotero.BetterBibTeX.CSLDateParser.parseDateToObject(date);
+    parsed = Zotero.BetterBibTeX.CSL.DateParser.parseDateToObject(date);
     for (k in parsed) {
       v = parsed[k];
       switch (false) {
@@ -940,8 +974,16 @@ Zotero.BetterBibTeX.init = function() {
     },
     CSL: {
       parseParticles: function(sandbox, name) {
-        Zotero.BetterBibTeX.parseParticles(name);
-        return Zotero.BetterBibTeX.parseParticles(name);
+        Zotero.BetterBibTeX.CSL.parseParticles(name);
+        return Zotero.BetterBibTeX.CSL.parseParticles(name);
+      },
+      titleCase: function(sandbox, string) {
+        string = string.replace(/\(/g, "(\x02 ");
+        string = string.replace(/\)/g, " \x03)");
+        string = Zotero.BetterBibTeX.CSL.Output.Formatters.title(Zotero.BetterBibTeX.titleCase.state, string);
+        string = string.replace(/\x02 /g, '');
+        string = string.replace(/ \x03/g, '');
+        return string;
       }
     },
     parseDateToObject: function(sandbox, date, locale) {
@@ -973,7 +1015,7 @@ Zotero.BetterBibTeX.init = function() {
   ref1 = Zotero.BetterBibTeX.Locales.months;
   for (k in ref1) {
     months = ref1[k];
-    Zotero.BetterBibTeX.CSLDateParser.addDateParserMonths(months);
+    Zotero.BetterBibTeX.CSL.DateParser.addDateParserMonths(months);
   }
   Zotero.Server.DataListener.prototype._generateResponse = (function(original) {
     return function(status, contentType, promise) {

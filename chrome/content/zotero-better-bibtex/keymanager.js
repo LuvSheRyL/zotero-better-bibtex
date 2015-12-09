@@ -3,6 +3,8 @@ var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i 
   hasProp = {}.hasOwnProperty;
 
 Zotero.BetterBibTeX.keymanager = new ((function() {
+  var n;
+
   function _Class() {
     this.db = Zotero.BetterBibTeX.DB;
     this.log = Zotero.BetterBibTeX.log;
@@ -164,6 +166,29 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
     return item;
   };
 
+  _Class.prototype.alphabet = (function() {
+    var i, results;
+    results = [];
+    for (n = i = 0; i < 26; n = ++i) {
+      results.push(String.fromCharCode('a'.charCodeAt() + n));
+    }
+    return results;
+  })();
+
+  _Class.prototype.postfix = function(n) {
+    var postfix;
+    if (n === 0) {
+      return '';
+    }
+    n -= 1;
+    postfix = '';
+    while (n >= 0) {
+      postfix = this.alphabet[n % 26] + postfix;
+      n = parseInt(n / 26) - 1;
+    }
+    return postfix;
+  };
+
   _Class.prototype.assign = function(item, pin) {
     var citekey, in_use, itemID, key, libraryID, postfix, postfixStyle, ref, ref1, ref2, res;
     ref = Zotero.BetterBibTeX.formatter.format(item), citekey = ref.citekey, postfixStyle = ref.postfix;
@@ -188,15 +213,15 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
       return results;
     }).call(this);
     postfix = {
-      n: -1,
+      n: 0,
       c: ''
     };
     while (ref2 = citekey + postfix.c, indexOf.call(in_use, ref2) >= 0) {
       postfix.n++;
       if (postfixStyle === '0') {
-        postfix.c = '-' + (postfix.n + 1);
+        postfix.c = "-" + postfix.n;
       } else {
-        postfix.c = String.fromCharCode('a'.charCodeAt() + postfix.n);
+        postfix.c = this.postfix(postfix.n);
       }
     }
     res = this.set(item, citekey + postfix.c, pin);

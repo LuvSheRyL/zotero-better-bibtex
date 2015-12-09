@@ -31,7 +31,7 @@ pref('extensions.zotero.translators.better-bibtex.debug', false);
 
 pref('extensions.zotero.translators.better-bibtex.DOIandURL', 'both');
 
-pref('extensions.zotero.translators.better-bibtex.fancyURLs', false);
+pref('extensions.zotero.translators.better-bibtex.bibtexURLs', false);
 
 pref('extensions.zotero.translators.better-bibtex.csquotes', '');
 
@@ -44,8 +44,6 @@ pref('extensions.zotero.translators.better-bibtex.logging', false);
 pref('extensions.zotero.translators.better-bibtex.pinCitekeys', 'manual');
 
 pref('extensions.zotero.translators.better-bibtex.preserveBibTeXVariables', false);
-
-pref('extensions.zotero.translators.better-bibtex.preserveCaps', 'all');
 
 pref('extensions.zotero.translators.better-bibtex.rawImports', false);
 
@@ -66,3 +64,9 @@ pref('extensions.zotero.translators.better-bibtex.postscript', '');
 pref('extensions.zotero.translators.better-bibtex.jabrefGroups', true);
 
 pref('extensions.zotero.translators.better-bibtex.defaultDateParserLocale', '');
+
+pref('extensions.zotero.translators.better-bibtex.titleCase', false);
+
+pref('extensions.zotero.translators.better-bibtex.titleCaseLowerCase', "about above across afore after against along alongside amid amidst among amongst anenst apropos apud around as aside astride at athwart atop barring before behind below beneath beside besides between beyond but by circa despite down during except for forenenst from given in inside into lest like modulo near next notwithstanding of off on onto out over per plus pro qua sans since than through thru throughout thruout till to toward towards under underneath until unto up upon versus vs. v. vs v via vis-à-vis with within without according to ahead of apart from as for as of as per as regards aside from back to because of close to due to except for far from inside of instead of near to next to on to out from out of outside of prior to pursuant to rather than regardless of such as _that_ their of up to where as or yet so for and nor a an the de d' von van c et ca");
+
+pref('extensions.zotero.translators.better-bibtex.titleCaseUpperCase', 'ID TV');

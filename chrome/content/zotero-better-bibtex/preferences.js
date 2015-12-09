@@ -21,7 +21,13 @@ BetterBibTeXPref = {
       document.getElementById('zotero-better-bibtex-disabled-message').value = Zotero.BetterBibTeX.disabled;
     }
     BetterBibTeXPref.savedPattern = Zotero.BetterBibTeX.pref.get('citekeyFormat');
-    return BetterBibTeXPref.update();
+    BetterBibTeXPref.update();
+    Zotero.BetterBibTeX.debug('prefs pane loaded:', document.location.hash);
+    if (document.location.hash === '#better-bibtex') {
+      return setTimeout((function() {
+        return document.getElementById('zotero-prefs').showPane(document.getElementById('zotero-prefpane-better-bibtex'));
+      }), 500);
+    }
   },
   saveCitekeyFormat: function() {
     return BetterBibTeXPref.savedPattern = Zotero.BetterBibTeX.pref.get('citekeyFormat');
@@ -99,7 +105,7 @@ BetterBibTeXPref = {
       err = error;
       parseerror = err;
     }
-    Zotero.BetterBibTeX.debug('parsing format', keyformat.value, ':', !!parseerror);
+    Zotero.BetterBibTeX.debug('parsing format', keyformat.value, ':', !parseerror);
     keyformat.setAttribute('style', (parseerror ? '-moz-appearance: none !important; background-color: DarkOrange' : ''));
     keyformat.setAttribute('tooltiptext', '' + (parseerror || ''));
     document.getElementById('id-better-bibtex-preferences-pin-citekeys-on-change').setAttribute('disabled', !Zotero.BetterBibTeX.allowAutoPin());

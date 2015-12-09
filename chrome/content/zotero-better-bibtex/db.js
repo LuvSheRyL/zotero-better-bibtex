@@ -6,6 +6,7 @@ Zotero.BetterBibTeX.DB = new ((function() {
 
   function _Class() {
     var base, cacheReset, db, idleService, keepCache, volatile;
+    Zotero.debug('DB.initialize');
     this.db = {
       main: new loki('db.json', {
         autosave: true,
@@ -60,19 +61,19 @@ Zotero.BetterBibTeX.DB = new ((function() {
     }));
     this.upgradeNeeded = this.metadata.Zotero !== ZOTERO_CONFIG.VERSION || this.metadata.BetterBibTeX !== Zotero.BetterBibTeX.release;
     cacheReset = Zotero.BetterBibTeX.pref.get('cacheReset');
-    if (!cacheReset) {
-      cacheReset = !keepCache && this.metadata.BetterBibTeX && Services.vc.compare(this.metadata.BetterBibTeX, Zotero.BetterBibTeX.release) < 0;
+    Zotero.debug('DB.initialize, cache reset: ' + JSON.stringify({
+      cacheReset: cacheReset,
+      keepCache: keepCache,
+      metadata: this.metadata,
+      release: Zotero.BetterBibTeX.release
+    }));
+    if (!cacheReset && !keepCache) {
+      cacheReset = !this.metadata.BetterBibTeX || this.metadata.BetterBibTeX !== Zotero.BetterBibTeX.release;
       if (cacheReset && Zotero.BetterBibTeX.pref.get('confirmCacheReset') && (this.cache.chain().data().length > 3000 || this.serialized.chain().data().length > 3000)) {
         cacheReset = confirm(['You have upgraded BetterBibTeX. This usually means output generation for Bib(La)TeX has changed.', 'If you want this change to be applied immediately, you can clear the BibTeX cache. If you have a large library, first (auto)export will be slower than usual', 'If you are in principle satisfied with the output you had, you can just have Better BibTeX replenish the cache as items are changed or added', '', 'Do you want to reset the BibTeX cache now?'].join("\n"));
       }
     }
     if (cacheReset) {
-      Zotero.BetterBibTeX.debug('db.reset:', {
-        cacheReset: cacheReset,
-        keepCache: keepCache,
-        db: this.metadata.BetterBibTeX,
-        release: Zotero.BetterBibTeX.release
-      });
       this.serialized.removeDataOnly();
       this.cache.removeDataOnly();
       if (typeof cacheReset === 'number') {
@@ -81,9 +82,9 @@ Zotero.BetterBibTeX.DB = new ((function() {
           cacheReset = 0;
         }
         Zotero.BetterBibTeX.pref.set('cacheReset', cacheReset);
-        Zotero.BetterBibTeX.debug('cache.load forced reset', cacheReset, 'left');
+        Zotero.debug('DB.initialize, cache.load forced reset, ' + cacheReset + 'left');
       } else {
-        Zotero.BetterBibTeX.debug('cache.load reset after upgrade from', this.metadata.BetterBibTeX, 'to', Zotero.BetterBibTeX.release);
+        Zotero.debug("DB.initialize, cache.load reset after upgrade from " + this.metadata.BetterBibTeX + " to " + Zotero.BetterBibTeX.release);
       }
     }
     this.keys.on('insert', (function(_this) {
@@ -114,10 +115,8 @@ Zotero.BetterBibTeX.DB = new ((function() {
         });
       };
     })(this));
-    Zotero.BetterBibTeX.debug('DB: ready');
-    Zotero.BetterBibTeX.debug('DB: ready.serialized:', {
-      n: this.serialized.chain().data().length
-    });
+    Zotero.debug('DB.initialize: ready');
+    Zotero.debug("DB.initialize: ready.serialized: " + (this.serialized.chain().data().length));
     idleService = Components.classes['@mozilla.org/widget/idleservice;1'].getService(Components.interfaces.nsIIdleService);
     idleService.addIdleObserver({
       observe: (function(_this) {

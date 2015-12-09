@@ -27,7 +27,7 @@ LaTeX.toLaTeX.unicode.text = {
   '{': "\\{",
   '}': "\\}",
   '~': "{\\textasciitilde}",
-  '\u00A0': " "
+  '\u00A0': "~"
 };
 
 LaTeX.toLaTeX.ascii.math = {
@@ -1654,7 +1654,7 @@ LaTeX.toLaTeX.ascii.text = {
   '{': "\\{",
   '}': "\\}",
   '~': "{\\textasciitilde}",
-  '\u00A0': " ",
+  '\u00A0': "~",
   '\u00A1': "{\\textexclamdown}",
   '\u00A2': "{\\textcent}",
   '\u00A3': "{\\textsterling}",
@@ -2424,6 +2424,7 @@ LaTeX.toUnicode = {
   "\\}": '}',
   "{\\textasciitilde}": '~',
   "\\textasciitilde ": '~',
+  "~": '\u00A0',
   "{\\textexclamdown}": '\u00A1',
   "\\textexclamdown ": '\u00A1',
   "{\\textcent}": '\u00A2',

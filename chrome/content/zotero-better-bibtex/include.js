@@ -3,7 +3,7 @@ var i, len, load, loader, ref, script;
 
 if (!Zotero.BetterBibTeX) {
   loader = Components.classes['@mozilla.org/moz/jssubscript-loader;1'].getService(Components.interfaces.mozIJSSubScriptLoader);
-  ref = " lokijs zotero-better-bibtex db csl-localedata csl-dateparser fold-to-ascii punycode release BetterBibTeXPatternFormatter BetterBibTeXPatternParser preferences keymanager web-endpoints schomd cayw debug-bridge cache autoexport serialized csl-util_name_particles".trim().split(/\s+/);
+  ref = " lokijs zotero-better-bibtex release db csl-localedata fold-to-ascii punycode BetterBibTeXPatternFormatter BetterBibTeXPatternParser preferences keymanager web-endpoints schomd cayw debug-bridge cache autoexport serialized".trim().split(/\s+/);
   for (i = 0, len = ref.length; i < len; i++) {
     script = ref[i];
     Zotero.debug('BBT: ' + script);

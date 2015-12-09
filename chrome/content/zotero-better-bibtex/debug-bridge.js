@@ -9,6 +9,7 @@ Zotero.BetterBibTeX.DebugBridge.methods.init = function() {
     return;
   }
   Zotero.BetterBibTeX.DebugBridge.initialized = true;
+  Zotero.getActiveZoteroPane().show();
   Zotero.noUserInput = true;
   Zotero.Items.getAll = function(onlyTopLevel, libraryID, includeDeleted) {
     var ids, sql;
@@ -34,34 +35,34 @@ Zotero.BetterBibTeX.DebugBridge.methods.init = function() {
 };
 
 Zotero.BetterBibTeX.DebugBridge.methods.reset = function() {
-  var coll, err, i, item, j, key, len, len1, ref, ref1;
+  var coll, err, item, j, k, key, len, len1, ref, ref1;
   Zotero.BetterBibTeX.DebugBridge.methods.init();
   ref = Zotero.BetterBibTeX.pref.prefs.getChildList('');
-  for (i = 0, len = ref.length; i < len; i++) {
-    key = ref[i];
+  for (j = 0, len = ref.length; j < len; j++) {
+    key = ref[j];
     Zotero.BetterBibTeX.pref.prefs.clearUserPref(key);
   }
   Zotero.Items.erase((function() {
-    var j, len1, ref1, results;
+    var k, len1, ref1, results;
     ref1 = Zotero.BetterBibTeX.safeGetAll();
     results = [];
-    for (j = 0, len1 = ref1.length; j < len1; j++) {
-      item = ref1[j];
+    for (k = 0, len1 = ref1.length; k < len1; k++) {
+      item = ref1[k];
       results.push(item.id);
     }
     return results;
   })());
   ref1 = Zotero.BetterBibTeX.safeGetAll();
-  for (j = 0, len1 = ref1.length; j < len1; j++) {
-    item = ref1[j];
+  for (k = 0, len1 = ref1.length; k < len1; k++) {
+    item = ref1[k];
     item.erase();
   }
   Zotero.Collections.erase((function() {
-    var k, len2, ref2, results;
+    var l, len2, ref2, results;
     ref2 = Zotero.getCollections();
     results = [];
-    for (k = 0, len2 = ref2.length; k < len2; k++) {
-      coll = ref2[k];
+    for (l = 0, len2 = ref2.length; l < len2; l++) {
+      coll = ref2[l];
       results.push(coll.id);
     }
     return results;
@@ -75,11 +76,11 @@ Zotero.BetterBibTeX.DebugBridge.methods.reset = function() {
     return true;
   }
   err = JSON.stringify((function() {
-    var k, len2, ref2, results;
+    var l, len2, ref2, results;
     ref2 = Zotero.BetterBibTeX.safeGetAll();
     results = [];
-    for (k = 0, len2 = ref2.length; k < len2; k++) {
-      item = ref2[k];
+    for (l = 0, len2 = ref2.length; l < len2; l++) {
+      item = ref2[l];
       results.push(item.toArray());
     }
     return results;
@@ -96,15 +97,15 @@ Zotero.BetterBibTeX.DebugBridge.methods["import"] = function(filename) {
 };
 
 Zotero.BetterBibTeX.DebugBridge.methods.librarySize = function() {
-  var count, i, items, len, ref;
+  var count, items, j, len, ref;
   items = {
     references: 0,
     notes: 0,
     attachments: 0
   };
   ref = Zotero.DB.query("select count(*) as nr, case itemtypeID when 1 then 'notes' when 14 then 'attachments' else 'references' end as itemType from items i where not i.itemID in (select d.itemID from deletedItems d) group by 2");
-  for (i = 0, len = ref.length; i < len; i++) {
-    count = ref[i];
+  for (j = 0, len = ref.length; j < len; j++) {
+    count = ref[j];
     items[count.itemType] = parseInt(count.nr);
   }
   Zotero.BetterBibTeX.debug('librarySize:', items);
@@ -202,18 +203,40 @@ Zotero.BetterBibTeX.DebugBridge.methods.cacheStats = function() {
 };
 
 Zotero.BetterBibTeX.DebugBridge.methods.find = function(attribute, value, select) {
-  var id, sql, zoteroPane;
+  var attempt, i, id, j, selected, sql, zoteroPane;
   attribute = attribute.replace(/[^a-zA-Z]/, '');
   sql = "select i.itemID as itemID from items i join itemData id on i.itemID = id.itemID join itemDataValues idv on idv.valueID = id.valueID join fields f on id.fieldID = f.fieldID where f.fieldName = '" + attribute + "' and not i.itemID in (select itemID from deletedItems) and idv.value = ?";
   id = Zotero.DB.valueQuery(sql, [value]);
   if (!id) {
     throw new Error("No item found with " + attribute + " = '" + value + "'");
   }
-  if (select) {
-    zoteroPane = Zotero.getActiveZoteroPane();
-    zoteroPane.selectItem(id, true);
+  id = parseInt(id);
+  if (!select) {
+    return id;
   }
-  return id;
+  for (attempt = j = 1; j <= 10; attempt = ++j) {
+    Zotero.BetterBibTeX.debug("select: " + id + ", attempt " + attempt);
+    zoteroPane = Zotero.getActiveZoteroPane();
+    zoteroPane.show();
+    if (!zoteroPane.selectItem(id, true)) {
+      continue;
+    }
+    selected = (function() {
+      var k, len, ref, results;
+      ref = zoteroPane.getSelectedItems(true);
+      results = [];
+      for (k = 0, len = ref.length; k < len; k++) {
+        i = ref[k];
+        results.push(parseInt(i));
+      }
+      return results;
+    })();
+    if (selected.length === 1 && id === selected[0]) {
+      return id;
+    }
+    Zotero.BetterBibTeX.debug("select: expected " + (JSON.stringify([id])) + ", got " + (JSON.stringify(selected)));
+  }
+  throw new Error("failed to select " + id);
 };
 
 Zotero.BetterBibTeX.DebugBridge.methods.remove = function(id) {

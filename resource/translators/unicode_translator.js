@@ -5,66 +5,77 @@ if (!LaTeX) {
   LaTeX = {};
 }
 
-LaTeX.text2latex = function(text) {
+LaTeX.text2latex = function(text, options) {
   var latex;
-  latex = this.html2latex(this.cleanHTML(text));
+  if (options == null) {
+    options = {};
+  }
+  latex = this.html2latex(this.cleanHTML(text, options), options);
   if (latex.indexOf("\\{") >= 0 || latex.indexOf("\\textleftbrace") >= 0 || latex.indexOf("\\}") >= 0 || latex.indexOf("\\textrightbrace") >= 0) {
-    return BetterBibTeXBraceBalancer.parse(latex);
+    latex = BetterBibTeXBraceBalancer.parse(latex);
   }
   return latex;
 };
 
-LaTeX.cleanHTML = function(text) {
-  var cdata, ch, chunk, close, html, i, j, k, len, len1, open, ref, ref1;
-  html = '';
-  cdata = false;
-  if (Translator.csquotes.length > 0) {
-    open = '';
-    close = '';
-    ref = Translator.csquotes;
-    for (i = j = 0, len = ref.length; j < len; i = ++j) {
-      ch = ref[i];
-      if (i % 2 === 0) {
-        open += ch;
+LaTeX.titleCase = function(string) {
+  return string.replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function(match, index, title) {
+    if (index > 0 && index + match.length !== title.length && match.search(Translator.titleCaseLowerCase) === 0 && title.charAt(index - 2) !== ':' && (title.charAt(index + match.length) !== '-' || title.charAt(index - 1) === '-') && title.charAt(index - 1).search(/[^"'(\s-]/) < 0) {
+      Translator.debug('titleCase: LC', match);
+      return match;
+    }
+    if (match.search(Translator.titleCaseUpperCase) === 0) {
+      Translator.debug('titleCase: UC', match);
+      return match;
+    }
+    if (match.substr(1).search(/[A-Z]|\../) > -1) {
+      Translator.debug('titleCase: NC', match);
+      return match;
+    }
+    Translator.debug('titleCase: TC', match);
+    return match.charAt(0).toUpperCase() + match.substr(1);
+  });
+};
+
+LaTeX.cleanHTML = function(text, options) {
+  var _html, c, html, i, j, len, plain, ref, titleCased;
+  ref = BetterBibTeXMarkupParser.parse(text, {
+    titleCase: options.autoCase && Translator.titleCase,
+    preserveCaps: options.autoCase,
+    csquotes: Translator.csquotes
+  }), html = ref.html, plain = ref.plain;
+  if (options.autoCase && Translator.titleCase) {
+    Translator.debug('TITLECASE:>', plain.text);
+    titleCased = this.titleCase(plain.text);
+    Translator.debug('TITLECASE:<', titleCased);
+    _html = '';
+    for (i = j = 0, len = html.length; j < len; i = ++j) {
+      c = html[i];
+      if (plain.unprotected[i] !== void 0) {
+        _html += titleCased[plain.unprotected[i]];
       } else {
-        close += ch;
+        _html += c;
       }
     }
-    text = text.replace(new RegExp("[" + open + "][\\s\\u00A0]?", 'g'), '<span enquote="true">');
-    text = text.replace(new RegExp("[\\s\\u00A0]?[" + close + "]", 'g'), '</span>');
+    html = _html;
   }
-  text = text.replace(/<pre[^>]*>(.*?)<\/pre[^>]*>/g, function(match, pre) {
-    return "<pre>" + (Translator.HTMLEncode(pre)) + "</pre>";
-  });
-  ref1 = text.split(/(<\/?(?:i|italic|b|sub|sup|pre|sc|span)(?:[^>a-z][^>]*)?>)/i);
-  for (i = k = 0, len1 = ref1.length; k < len1; i = ++k) {
-    chunk = ref1[i];
-    if (i % 2 === 0) {
-      html += Translator.HTMLEncode(chunk);
-    } else {
-      html += chunk;
-    }
-  }
-  Translator.debug('cleanHTML:', {
-    text: text,
-    html: html
-  });
   return html;
 };
 
-LaTeX.html2latex = function(html) {
+LaTeX.html2latex = function(html, options) {
   var latex;
-  latex = (new this.HTML(html)).latex;
+  latex = (new this.HTML(html, options)).latex;
   latex = latex.replace(/(\\\\)+\s*\n\n/g, "\n\n");
   latex = latex.replace(/\n\n\n+/g, "\n\n");
   return latex;
 };
 
 LaTeX.HTML = (function() {
-  function HTML(html) {
+  function HTML(html, options1) {
+    this.options = options1 != null ? options1 : {};
     this.latex = '';
     this.mapping = (Translator.unicode ? LaTeX.toLaTeX.unicode : LaTeX.toLaTeX.ascii);
-    this.state = {};
+    this.stack = [];
+    this.preserveCase = 0;
     this.walk(Zotero.BetterBibTeX.HTMLParser(html));
   }
 
@@ -73,23 +84,29 @@ LaTeX.HTML = (function() {
     if (!tag) {
       return;
     }
-    if (tag.name === '#text') {
-      if ((this.state.pre || 0) > 0) {
-        this.latex += tag.text;
-      } else {
+    switch (tag.name) {
+      case '#text':
         this.chars(tag.text);
-      }
-      return;
+        return;
+      case 'script':
+        this.latex += tag.text;
+        return;
     }
-    this.state[tag.name] = (this.state[tag.name] || 0) + 1;
+    this.stack.unshift(tag);
     switch (tag.name) {
       case 'i':
       case 'em':
       case 'italic':
+        if (this.options.autoCase && !this.preserveCase) {
+          this.latex += '{';
+        }
         this.latex += '\\emph{';
         break;
       case 'b':
       case 'strong':
+        if (this.options.autoCase && !this.preserveCase) {
+          this.latex += '{';
+        }
         this.latex += '\\textbf{';
         break;
       case 'a':
@@ -98,9 +115,15 @@ LaTeX.HTML = (function() {
         }
         break;
       case 'sup':
+        if (this.options.autoCase && !this.preserveCase) {
+          this.latex += '{';
+        }
         this.latex += '\\textsuperscript{';
         break;
       case 'sub':
+        if (this.options.autoCase && !this.preserveCase) {
+          this.latex += '{';
+        }
         this.latex += '\\textsubscript{';
         break;
       case 'br':
@@ -134,6 +157,15 @@ LaTeX.HTML = (function() {
       case 'sc':
         tag.smallcaps = tag.name === 'sc' || (tag.attrs.style || '').match(/small-caps/i);
         tag.enquote = tag.attrs.enquote === 'true';
+        if (tag["class"].nocase) {
+          this.preserveCase += 1;
+        }
+        if (tag["class"].nocase && this.preserveCase === 1) {
+          this.latex += '{{';
+        }
+        if (this.options.autoCase && !this.preserveCase && (tag.enquote || tag.smallcaps)) {
+          this.latex += '{';
+        }
         if (tag.enquote) {
           this.latex += '\\enquote{';
         }
@@ -163,11 +195,19 @@ LaTeX.HTML = (function() {
       case 'i':
       case 'italic':
       case 'em':
+        this.latex += '}';
+        if (this.options.autoCase && !this.preserveCase) {
+          this.latex += '}';
+        }
+        break;
       case 'sup':
       case 'sub':
       case 'b':
       case 'strong':
         this.latex += '}';
+        if (this.options.autoCase && !this.preserveCase) {
+          this.latex += '}';
+        }
         break;
       case 'a':
         if (((ref2 = tag.attrs.href) != null ? ref2.length : void 0) > 0) {
@@ -188,8 +228,20 @@ LaTeX.HTML = (function() {
         break;
       case 'span':
       case 'sc':
-        if (tag.smallcaps || tag.enquote) {
+        if (tag.smallcaps) {
           this.latex += '}';
+        }
+        if (tag.enquote) {
+          this.latex += '}';
+        }
+        if (this.options.autoCase && !this.preserveCase && (tag.smallcaps || tag.enquote)) {
+          this.latex += '{';
+        }
+        if (tag["class"].nocase && this.options.autoCase && this.preserveCase === 1) {
+          this.latex += '}}';
+        }
+        if (tag["class"].nocase) {
+          this.preserveCase -= 1;
         }
         break;
       case 'td':
@@ -202,7 +254,7 @@ LaTeX.HTML = (function() {
       case 'ul':
         this.latex += "\n\n\\end{itemize}\n";
     }
-    return this.state[tag.name] -= 1;
+    return this.stack.shift();
   };
 
   HTML.prototype.chars = function(text) {
