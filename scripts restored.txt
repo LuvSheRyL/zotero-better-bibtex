@@ -1,16 +1,15 @@
+item.setField('callNumber',citekey);
     if (item.isRegularItem()) { // not an attachment already
         var fulltext = new Array;
         var attachments = item.getAttachments(false);
-        var a,archiveLocation,extension;
+        var a,archiveLocation;
         for (a in attachments) {
             var a_item = Zotero.Items.get(attachments[a]);
             if (a_item.attachmentMIMEType == 'application/pdf' && a_item.attachmentPath.length>0) {    //only pdf could be attached
-              archiveLocation=a_item.key+'/'+citekey.replace('bibtex:','','g').trim()+'.pdf:PDF';
+              archiveLocation=a_item.key+'/'+citekey+'.pdf:PDF';
               fulltext.push(archiveLocation);
             }
         }
-
-
         for (a in attachments) {
             var a_item = Zotero.Items.get(attachments[a]);
             if (a_item.attachmentMIMEType == 'text/html' && a_item.attachmentPath.length>0) {    
@@ -19,7 +18,5 @@
             }
         }
         archiveLocation=fulltext.join(";:").trim();
-        item.setField('archiveLocation',archiveLocation.trim());
-        //这里通过save函数来保存， 是有问题的,以后再改
-        item.save({skipDateModifiedUpdate:true});
-    }
+        item.setField('archiveLocation',archiveLocation);
+      }

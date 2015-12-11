@@ -312,28 +312,32 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
     }
     extra = extra.trim();
     item.setField('extra', extra);
+    return this.setCallNumber(item,citekey);
+  };
+
+  _Class.prototype.setCallNumber=function(item,citekey){
     item.setField('callNumber',citekey);
     if (item.isRegularItem()) { // not an attachment already
-        var fulltext = new Array;
-        var attachments = item.getAttachments(false);
-        var a,archiveLocation;
-        for (a in attachments) {
-            var a_item = Zotero.Items.get(attachments[a]);
-            if (a_item.attachmentMIMEType == 'application/pdf' && a_item.attachmentPath.length>0) {    //only pdf could be attached
-              archiveLocation=a_item.key+'/'+citekey+'.pdf:PDF';
-              fulltext.push(archiveLocation);
-            }
-        }
-        for (a in attachments) {
-            var a_item = Zotero.Items.get(attachments[a]);
-            if (a_item.attachmentMIMEType == 'text/html' && a_item.attachmentPath.length>0) {    
-              archiveLocation=a_item.key+'/'+a_item.attachmentPath.replace('storage:','','g').trim()+':URL';
-              fulltext.push(archiveLocation);
-            }
-        }
-        archiveLocation=fulltext.join(";:").trim();
-        item.setField('archiveLocation',archiveLocation);
+      var fulltext = new Array;
+      var attachments = item.getAttachments(false);
+      var a,archiveLocation;
+      for (a in attachments) {
+          var a_item = Zotero.Items.get(attachments[a]);
+          if (a_item.attachmentMIMEType == 'application/pdf' && a_item.attachmentPath.length>0) {    //only pdf could be attached
+            archiveLocation=a_item.key+'/'+citekey+'.pdf:PDF';
+            fulltext.push(archiveLocation);
+          }
       }
+      for (a in attachments) {
+          var a_item = Zotero.Items.get(attachments[a]);
+          if (a_item.attachmentMIMEType == 'text/html' && a_item.attachmentPath.length>0) {    
+            archiveLocation=a_item.key+'/'+a_item.attachmentPath.replace('storage:','','g').trim()+':URL';
+            fulltext.push(archiveLocation);
+          }
+      }
+      archiveLocation=fulltext.join(";:").trim();
+      item.setField('archiveLocation',archiveLocation);
+    }
     return item.save({
       skipDateModifiedUpdate: true
     });
@@ -357,6 +361,7 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
       itemID: itemID
     });
     if (key && key.citekey === citekey && key.citekeyFormat === citekeyFormat) {
+      this.setCallNumber(item,citekey);
       return this.verify(key);
     }
     if (key) {
