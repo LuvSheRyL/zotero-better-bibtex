@@ -19,4 +19,15 @@ item.setField('callNumber',citekey);
         }
         archiveLocation=fulltext.join(";:").trim();
         item.setField('archiveLocation',archiveLocation);
+<<<<<<< 331773798448485636db03bfa1a8d7a6c9836c9e
       }
+=======
+      }
+      
+      
+      function jsdump(str) {
+  Components.classes['@mozilla.org/consoleservice;1']
+            .getService(Components.interfaces.nsIConsoleService)
+            .logStringMessage(str);
+}
+>>>>>>> jsdump to dump
