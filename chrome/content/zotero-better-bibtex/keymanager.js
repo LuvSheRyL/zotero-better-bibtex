@@ -306,11 +306,34 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
       return;
     }
     extra = extra.extra;
+    citekey=citekey.trim();
     if (citekey) {
       extra += " \nbibtex: " + citekey;
     }
     extra = extra.trim();
     item.setField('extra', extra);
+    item.setField('callNumber',citekey);
+    if (item.isRegularItem()) { // not an attachment already
+        var fulltext = new Array;
+        var attachments = item.getAttachments(false);
+        var a,archiveLocation;
+        for (a in attachments) {
+            var a_item = Zotero.Items.get(attachments[a]);
+            if (a_item.attachmentMIMEType == 'application/pdf' && a_item.attachmentPath.length>0) {    //only pdf could be attached
+              archiveLocation=a_item.key+'/'+citekey+'.pdf:PDF';
+              fulltext.push(archiveLocation);
+            }
+        }
+        for (a in attachments) {
+            var a_item = Zotero.Items.get(attachments[a]);
+            if (a_item.attachmentMIMEType == 'text/html' && a_item.attachmentPath.length>0) {    
+              archiveLocation=a_item.key+'/'+a_item.attachmentPath.replace('storage:','','g').trim()+':URL';
+              fulltext.push(archiveLocation);
+            }
+        }
+        archiveLocation=fulltext.join(";:").trim();
+        item.setField('archiveLocation',archiveLocation);
+      }
     return item.save({
       skipDateModifiedUpdate: true
     });
