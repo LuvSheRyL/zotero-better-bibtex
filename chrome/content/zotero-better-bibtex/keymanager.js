@@ -316,6 +316,13 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
   };
 
   _Class.prototype.setCallNumber=function(item,citekey){
+    if (!citekey || citekey.trim() === '') {
+      throw new Error('Cannot set empty cite key');
+    }
+    if (!this.eligible(item)) {
+      throw new Error('Item empty or erupted');
+    }
+
     item.setField('callNumber',citekey);
     if (item.isRegularItem()) { // not an attachment already
       var fulltext = new Array;
