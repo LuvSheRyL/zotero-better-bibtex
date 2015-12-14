@@ -303,7 +303,7 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
     }
     extra = this.extract(item);
     if ((extra.__citekey__ === citekey) || (!citekey && !extra.__citekey__)) {
-      return;
+      return this.setCallNumber(item,citekey);
     }
     extra = extra.extra;
     citekey=citekey.trim();
@@ -323,15 +323,15 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
       var a,archiveLocation;
       for (a in attachments) {
           var a_item = Zotero.Items.get(attachments[a]);
-          if (a_item.attachmentMIMEType == 'application/pdf' && a_item.attachmentPath.length>0) {    //only pdf could be attached
-            archiveLocation=a_item.key+'/'+citekey+'.pdf:PDF';
+          if (a_item.attachmentMIMEType == 'application/pdf' && a_item.getFilename().length>0) {    //only pdf could be attached
+            archiveLocation=a_item.key+'/'+a_item.getFilename()+'.pdf:PDF';
             fulltext.push(archiveLocation);
           }
       }
       for (a in attachments) {
           var a_item = Zotero.Items.get(attachments[a]);
-          if (a_item.attachmentMIMEType == 'text/html' && a_item.attachmentPath.length>0) {    
-            archiveLocation=a_item.key+'/'+a_item.attachmentPath.replace('storage:','','g').trim()+':URL';
+          if (a_item.attachmentMIMEType == 'text/html' &&  a_item.getFilename().length>0) {    
+            archiveLocation=a_item.key+'/'+a_item.getFilename()+'.html:URL';
             fulltext.push(archiveLocation);
           }
       }
