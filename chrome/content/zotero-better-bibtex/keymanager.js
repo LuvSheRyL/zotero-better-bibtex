@@ -324,14 +324,14 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
       for (a in attachments) {
           var a_item = Zotero.Items.get(attachments[a]);
           if (a_item.attachmentMIMEType == 'application/pdf' && a_item.getFilename().length>0) {    //only pdf could be attached
-            archiveLocation=a_item.key+'/'+a_item.getFilename()+'.pdf:PDF';
+            archiveLocation=a_item.key+'/'+a_item.getFilename()+':PDF';
             fulltext.push(archiveLocation);
           }
       }
       for (a in attachments) {
           var a_item = Zotero.Items.get(attachments[a]);
           if (a_item.attachmentMIMEType == 'text/html' &&  a_item.getFilename().length>0) {    
-            archiveLocation=a_item.key+'/'+a_item.getFilename()+'.html:URL';
+            archiveLocation=a_item.key+'/'+a_item.getFilename()+':URL';
             fulltext.push(archiveLocation);
           }
       }
