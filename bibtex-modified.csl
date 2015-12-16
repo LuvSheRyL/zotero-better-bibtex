@@ -9,7 +9,7 @@
       <name>Markus Schaffner</name>
     </author>
     <contributor>
-      <name>Richard Karnesky &&　leoatchina</name>
+      <name>leoatchina</name>
       <email>leaotchina@gmail.com</email>
       <uri>http://leoatchina.com</uri>
     </contributor>
@@ -163,7 +163,7 @@
         <text variable="archive_location" prefix=" file={:" suffix="}"/>
         <text variable="URL" prefix=" url={" suffix="}"/>
         <text variable="DOI" prefix=" DOI={" suffix="}"/>
-        <text variable="abstract" prefix=" abstractNote={" suffix="}"/>
+        <text variable="abstract" prefix=" Abstract={" suffix="}"/>
         <text variable="note" prefix=" note={" suffix="}"/>
         <text macro="number" prefix=" number={" suffix="}"/>
         <text macro="container-title"/>
