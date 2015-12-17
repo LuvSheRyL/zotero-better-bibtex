@@ -330,14 +330,15 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
       var a,archiveLocation;
       for (a in attachments) {
           var a_item = Zotero.Items.get(attachments[a]);
-          if (a_item.attachmentMIMEType == 'application/pdf' && a_item.getFilename().length>0) {    //only pdf could be attached
+          if (a_item.attachmentMIMEType === 'application/pdf' && a_item.getFilename().length>0) {    //only pdf could be attached
+            // jsdump(a_item.getFilename());
             archiveLocation=a_item.key+'/'+a_item.getFilename()+':PDF';
             fulltext.push(archiveLocation);
           }
       }
       for (a in attachments) {
           var a_item = Zotero.Items.get(attachments[a]);
-          if (a_item.attachmentMIMEType == 'text/html' &&  a_item.getFilename().length>0) {    
+          if (a_item.attachmentMIMEType === 'text/html'  && a_item.attachmentLinkMode!=Zotero.Attachments.LINK_MODE_LINKED_URL) {    
             archiveLocation=a_item.key+'/'+a_item.getFilename()+':URL';
             fulltext.push(archiveLocation);
           }
