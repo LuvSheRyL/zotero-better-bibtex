@@ -324,28 +324,6 @@ Zotero.BetterBibTeX.keymanager = new ((function() {
     }
 
     item.setField('callNumber',citekey);
-    if (item.isRegularItem()) { // not an attachment already
-      var fulltext = new Array;
-      var attachments = item.getAttachments(false);
-      var a,archiveLocation;
-      for (a in attachments) {
-          var a_item = Zotero.Items.get(attachments[a]);
-          if (a_item.attachmentMIMEType === 'application/pdf' && a_item.getFilename().length>0) {    //only pdf could be attached
-            // jsdump(a_item.getFilename());
-            archiveLocation=a_item.key+'/'+a_item.getFilename()+':PDF';
-            fulltext.push(archiveLocation);
-          }
-      }
-      for (a in attachments) {
-          var a_item = Zotero.Items.get(attachments[a]);
-          if (a_item.attachmentMIMEType === 'text/html'  && a_item.attachmentLinkMode!=Zotero.Attachments.LINK_MODE_LINKED_URL) {    
-            archiveLocation=a_item.key+'/'+a_item.getFilename()+':URL';
-            fulltext.push(archiveLocation);
-          }
-      }
-      archiveLocation=fulltext.join(";:").trim();
-      item.setField('archiveLocation',archiveLocation);
-    }
     return item.save({
       skipDateModifiedUpdate: true
     });
